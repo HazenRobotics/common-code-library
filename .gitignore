@@ -1,0 +1,34 @@
+
+
+# built application files
+*.apk
+*.ap_
+
+# Java class files
+*.class
+
+# generated files
+bin/
+gen/
+
+# Local configuration file (sdk path, etc)
+local.properties
+
+# Windows thumbnail db
+Thumbs.db
+
+# OSX files
+.DS_Store
+
+# Android Studio
+*.iml
+.idea
+.gradle
+build/
+
+#Other
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/captures
+.externalNativeBuild
