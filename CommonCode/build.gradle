@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.github.dcendents.android-maven'
 
 android {
     compileSdkVersion 27
@@ -36,6 +37,8 @@ android {
     }
 }
 
+group = 'com.github.HazenRobotics'
+
 dependencies {
     //FTC libraries
     implementation "com.github.modular-ftc:robotcontroller-repackaged:$ftc_version.0-lite"
@@ -53,14 +56,15 @@ task sourcesJar(type: Jar) {
 }
 
 task javadoc(type: Javadoc) {
+    failOnError false
     source = android.sourceSets.main.java.srcDirs
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    classpath += configurations.compile
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier = 'javadoc'
     from javadoc.destinationDir
-    options.encoding = 'UTF-8'
 }
 artifacts {
     archives javadocJar
