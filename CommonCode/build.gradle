@@ -43,3 +43,26 @@ dependencies {
     implementation "com.github.modular-ftc:ftc-common-repackaged:$ftc_version.0-lite"
     implementation "org.first.ftc:hardware:$ftc_version"
 }
+
+
+//For JitPack to be able to build the library files
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+    options.encoding = 'UTF-8'
+}
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
