@@ -61,7 +61,7 @@ public enum SensorColor implements NamedColorEnum {
             case 2: return VIOLET;
             case 3: return BLUE;
             case 4: return TEAL;
-            case 5: return TEAL;
+            case 5: return GREEN;
             case 6: return LIME;
             case 7: return LEMON;
             case 8: return YELLOW;
