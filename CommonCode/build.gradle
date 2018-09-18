@@ -14,21 +14,16 @@ android {
     }
     buildTypes {
         release {
+            debuggable true
             ndk {
                 abiFilters "armeabi-v7a"
             }
-
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
+            debuggable true
             ndk {
                 abiFilters "armeabi-v7a"
             }
-
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            useProguard false
         }
     }
     compileOptions {
@@ -57,7 +52,7 @@ task sourcesJar(type: Jar) {
 
 task javadoc(type: Javadoc) {
     failOnError false
-    source = android.sourceSets.main.java.srcDirs
+    source = android.sourceSets.main.java.sourceFiles
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
     classpath += configurations.compile
 }
