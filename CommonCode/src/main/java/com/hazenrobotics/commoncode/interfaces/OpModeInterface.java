@@ -9,5 +9,5 @@ public interface OpModeInterface extends HardwareInterface, GamepadInterface, Id
      * longer active, any loops currently calling this function should break and stop.
      * @return True if the OpMode is currently active, False if the OpMode needs to or is stopped.
      */
-    boolean opModeisActive();
+    boolean opModeIsActive();
 }
