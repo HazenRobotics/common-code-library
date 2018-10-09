@@ -34,8 +34,8 @@ public class TwoWheels implements Wheels {
 
         left = opModeInterface.getMotor(leftName);
         right = opModeInterface.getMotor(rightName);
-        left.setDirection(DcMotor.Direction.REVERSE);
-        right.setDirection(DcMotor.Direction.FORWARD);
+        left.setDirection(DcMotor.Direction.FORWARD);
+        right.setDirection(DcMotor.Direction.REVERSE);
     }
 
     /**
