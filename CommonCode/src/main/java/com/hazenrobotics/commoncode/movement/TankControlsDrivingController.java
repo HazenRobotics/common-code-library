@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
  * and the right stick y-axis controls the right wheel.
  * @see TwoWheels
  */
+@SuppressWarnings("unused,WeakerAccess")
 public class TankControlsDrivingController implements DrivingController {
     protected Gamepad controller;
     protected TwoWheels wheels;
@@ -40,7 +41,7 @@ public class TankControlsDrivingController implements DrivingController {
      * @param maxSpeed The new max movement speed
      */
     public void setSpeed(float maxSpeed) {
-        this.speed = speed;
+        this.speed = maxSpeed;
     }
 
     @Override

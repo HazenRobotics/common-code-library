@@ -1,44 +1,43 @@
 package com.hazenrobotics.commoncode.movement;
 
-
 import com.hazenrobotics.commoncode.interfaces.OpModeInterface;
 import com.hazenrobotics.commoncode.models.angles.Angle;
 import com.hazenrobotics.commoncode.models.angles.UnnormalizedAngleUnit;
-import com.hazenrobotics.commoncode.models.distances.Distance;
 import com.hazenrobotics.commoncode.models.angles.directions.RotationDirection;
 import com.hazenrobotics.commoncode.models.angles.directions.SimpleDirection;
 import com.hazenrobotics.commoncode.models.conditions.Condition;
+import com.hazenrobotics.commoncode.models.distances.Distance;
 import com.qualcomm.robotcore.hardware.DcMotor;
+
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 /**
- * Controller for Mecanum Wheels with encoders.
- * This allow a bot to move in all directions and strafe, and control the degree of such movements
- * using the encoders attached to the motors, theoretically allowing for measured moments.
- * Since Mecanum Wheels often lose traction with the ground and 'slip', these encoders are not
- * always accurate for measuring distances - Consider using {@link TwoEncoderWheels} instead.
- * @see MecanumWheels
- * @see TwoEncoderWheels
+ * Controller for a basic Two-Wheels configuration (one on each side of the bot) with encoders.
+ * This allow a bot to move forward, turn, and curve and control the degree of such movements using the
+ * encoders attached to the motors, allowing for measured movements.
+ * Using this two wheel motor configuration is preferred when using encoders over
+ * {@link MecanumEncoderWheels Mecanum Encoder Wheels} because the wheels tend to not slip, making
+ * the encoders more reliable.
+ * @see TwoWheels
+ * @see MecanumEncoderWheels
  */
 @SuppressWarnings("unused,WeakerAccess")
-public class MecanumEncoderWheels extends MecanumWheels implements EncoderWheels
-{
+public class TwoEncoderWheels extends TwoWheels implements EncoderWheels {
     protected EncoderConfiguration encoderConfig;
+
 
     /**
      * Initializes the class to use the two wheels with the given configuration of names, speed, and
      * encoder settings.
      * @param opModeInterface An interface from which the wheel motors can be accessed
-     * @param leftFrontName Name of the wheel in the robot configuration
-     * @param leftBackName See above
-     * @param rightFrontName See above
-     * @param rightBackName See above
+     * @param leftName Name of the left wheel in the robot configuration
+     * @param rightName Name of the right wheel in the robot configuration
      * @param encoderConfig A configuration of the robots wheels and dimensions in order to properly
      *                      use the encoders to calculate measured moves
      * @param speeds The speed settings to use for the different movement types
      */
-    public MecanumEncoderWheels(OpModeInterface opModeInterface, String leftFrontName, String leftBackName, String rightFrontName, String rightBackName, EncoderConfiguration encoderConfig, SpeedSettings speeds) {
-        super(opModeInterface, leftFrontName, leftBackName, rightFrontName, rightBackName, speeds);
+    public TwoEncoderWheels(OpModeInterface opModeInterface, String leftName, String rightName, EncoderConfiguration encoderConfig, SpeedSettings speeds) {
+        super(opModeInterface, leftName, rightName, speeds);
         this.encoderConfig = encoderConfig;
     }
 
@@ -46,25 +45,24 @@ public class MecanumEncoderWheels extends MecanumWheels implements EncoderWheels
      * Initializes the class to use the two wheels with the given configuration of names and
      * encoder settings.
      * @param opModeInterface An interface from which the wheel motors can be accessed
-     * @param leftFrontName Name of the wheel in the robot configuration
-     * @param leftBackName See above
-     * @param rightFrontName See above
-     * @param rightBackName See above
-     * @param encoderConfig A configuration of the robots wheels and dimensions in order to properly
-     *                      use the encoders to calculate measured moves
+     * @param leftName Name of the left wheel in the robot configuration
+     * @param rightName Name of the right wheel in the robot configuration
      */
-    public MecanumEncoderWheels(OpModeInterface opModeInterface, String leftFrontName, String leftBackName, String rightFrontName, String rightBackName,EncoderConfiguration encoderConfig) {
-        this(opModeInterface, leftFrontName, leftBackName, rightFrontName, rightBackName, encoderConfig, DEFAULT_SPEEDS);
+    public TwoEncoderWheels(OpModeInterface opModeInterface, String leftName, String rightName, EncoderConfiguration encoderConfig) {
+        this(opModeInterface, leftName, rightName, encoderConfig, DEFAULT_SPEEDS);
     }
 
     @Override
     public void move(Distance distance, SimpleDirection direction) {
-        move(distance, direction, speeds.move);
+        move(distance, SimpleDirection.FORWARDS, speeds.move);
     }
 
     /**
-     * Moves directly forward for a given distance using encoders without any turning at a given speed
-     * @param distance The distance to move
+     * Moves directly forward for a given distance using encoders without any turning at a given
+     * speed.
+     *@param distance The distance to move; a negative distance will invert the given movement
+     *                 direction
+     * @param direction The direction in which to move towards
      * @param speed The percent of maximum speed which wheels will turn at, should be between 0f and
      *              1f
      */
@@ -87,7 +85,7 @@ public class MecanumEncoderWheels extends MecanumWheels implements EncoderWheels
      * @param direction Determines if the wheels will move forward or backwards
      * @return The change in each wheels count value
      */
-    Counts recordMove(Condition condition, SimpleDirection direction) {
+    public Counts recordMove(Condition condition, SimpleDirection direction) {
         return recordMove(condition, direction, speeds.move);
     }
 
@@ -98,53 +96,9 @@ public class MecanumEncoderWheels extends MecanumWheels implements EncoderWheels
      * @param speed The speed at which the move being recorded will be taken
      * @return The change in each wheels count value
      */
-    Counts recordMove(Condition condition, SimpleDirection direction, float speed) {
+    public Counts recordMove(Condition condition, SimpleDirection direction, float speed) {
         Counts initial = Counts.fromPosition(this);
         move(condition, direction, speed);
-        Counts finial = Counts.fromPosition(this);
-        return finial.subtracted(initial);
-    }
-
-    /**
-     * Moves directly forward for a given number of counts at a given angle
-     * @param distance Will move forward this distance
-     * @param strafeAngle The angle which will be strafed towards
-     */
-    public void strafe(Distance distance, Angle strafeAngle) {
-        strafe(distance, strafeAngle, speeds.strafe);
-    }
-
-    /**
-     * Moves directly forward for a given number of counts at a given angle and speed
-     * @param distance Will move forward this distance
-     * @param strafeAngle The angle which will be strafed towards
-     * @param speed The percent of maximum speed which wheels will turn at, should be between 0f and
-     *              1f
-     */
-    public void strafe(Distance distance, Angle strafeAngle, float speed) {
-        /*
-        If the distance is positive, leave the direction unchanged, otherwise: invert it so that
-        movement power can be calculated just from direction not the sign of the direction.
-        */
-        strafeAngle = distance.isPositive() ? strafeAngle : strafeAngle.added(new Angle(180, UnnormalizedAngleUnit.DEGREES));
-        distance = distance.positivized();
-
-        int baseCounts = encoderConfig.getMoveCounts(distance);
-        Counts counts = Counts.fromCoefficients(calculateStrafe(strafeAngle), baseCounts);
-        runByCounts(counts, Math.abs(speed));
-    }
-
-    /**
-     * Records how much each of the wheel counts changed during a given movement and returns it
-     * @param condition Will move until this condition is true
-     * @param strafeAngle The angle which will be strafed towards
-     * @param speed The percent of maximum speed which wheels will move at, should be between 0f and
-     *              1f
-     * @return The change in each wheels count value
-     */
-    public Counts recordStrafe(Condition condition, Angle strafeAngle, float speed) {
-        Counts initial = Counts.fromPosition(this);
-        strafe(condition, strafeAngle, speed);
         Counts finial = Counts.fromPosition(this);
         return finial.subtracted(initial);
     }
@@ -155,14 +109,22 @@ public class MecanumEncoderWheels extends MecanumWheels implements EncoderWheels
     }
 
     /**
-     * Turns for a given angle using encoders
-     * @param angle The angle for which to turn
-     * @param speed The percent of maximum speed which wheels will move at, should be between 0f and
+     * Turns for a given angle using encoders.
+     * @param angle The angle for which to turn; a negative angle inverts the given rotation
+     *              direction
+     * @param direction The rotation direction in which to turn towards
+     * @param speed The percent of maximum speed which wheels will turn at, should be between 0f and
      *              1f
      */
     public void turn(Angle angle, RotationDirection direction, float speed) {
-        int baseCounts = encoderConfig.getTurnCounts(angle);
+        /*
+        If the distance is positive, leave the direction unchanged, otherwise: invert it so that
+        movement power can be calculated just from direction not the sign of the direction.
+        */
+        direction = angle.isPositive() ? direction : direction.inverted();
+        angle = angle.positivized();
 
+        int baseCounts = encoderConfig.getTurnCounts(angle);
         Counts counts = Counts.fromCoefficients(calculateTurn(direction), baseCounts);
         runByCounts(counts, Math.abs(speed));
     }
@@ -171,7 +133,7 @@ public class MecanumEncoderWheels extends MecanumWheels implements EncoderWheels
      * Records how much each of the wheel counts changed during a given turn and returns it
      * @param condition Will move until this condition is true
      * @param direction Determines what direction the turn will be towards
-     * @param speed The percent of maximum speed which wheels will move at, should be between 0f and
+     * @param speed The percent of maximum speed which wheels will turn at, should be between 0f and
      *              1f
      * @return The change in each wheels count value
      */
@@ -193,89 +155,73 @@ public class MecanumEncoderWheels extends MecanumWheels implements EncoderWheels
         counts = speed < 0 ? counts.negated() : counts;
         speed = Math.abs(speed);
 
-        leftFront.setTargetPosition(leftFront.getCurrentPosition() + counts.leftFront);
-        leftBack.setTargetPosition(leftBack.getCurrentPosition() + counts.leftBack);
-        rightFront.setTargetPosition(rightFront.getCurrentPosition() + counts.rightFront);
-        rightBack.setTargetPosition(rightBack.getCurrentPosition() + counts.rightBack);
+        left.setTargetPosition(left.getCurrentPosition() + counts.left);
+        right.setTargetPosition(right.getCurrentPosition() + counts.right);
 
-        leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        setPower(counts.toCoefficient(), Math.abs(speed));
-        while (leftFront.isBusy() && leftBack.isBusy() && rightFront.isBusy() && rightBack.isBusy()) {
+        setPower(counts.toCoefficient(), speed);
+        while (left.isBusy() && right.isBusy()) {
             opModeInterface.idle();
         }
         stop();
 
-        leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     public static class Counts {
-        /** The number of counts for the front left wheel */
-        public int leftFront = 0;
+        /** The number of counts for the left wheel */
+        public int left = 0;
 
-        /** The number of counts for the back left wheel */
-        public int leftBack = 0;
+        /** The number of counts for the right wheel */
+        public int right = 0;
 
-        /** The number of counts for the front right wheel */
-        public int rightFront = 0;
-
-        /** The number of counts for the back right wheel */
-        public int rightBack = 0;
-
-        /** Default constructor for Counts, which initializes all four wheel counts to 0. */
+        /**
+         * Default constructor for Counts, which initializes both wheel counts to 0
+         */
         public Counts() {}
 
         /**
-         * Creates a Counts object which holds count values for the four different wheels.
-         * @param leftFrontCounts The amount of counts for the front left wheel
-         * @param leftBackCounts The amount of counts for the back left wheel
-         * @param rightFrontCounts The amount of counts for the front right wheel
-         * @param rightBackCounts The amount of counts for the back right wheel
+         * Creates a Counts object which holds count values for the two wheels
+         * @param leftCounts The amount of counts for the left wheel
+         * @param rightCounts The amount of counts for the right wheel
          */
-        public Counts(int leftFrontCounts, int leftBackCounts, int rightFrontCounts, int rightBackCounts) {
-            this.leftFront = leftFrontCounts;
-            this.leftBack = leftBackCounts;
-            this.rightFront = rightFrontCounts;
-            this.rightBack = rightBackCounts;
+        public Counts(int leftCounts, int rightCounts) {
+            this.left = leftCounts;
+            this.right = rightCounts;
         }
 
         /**
-         * Returns the largest absolute counts value out of all of the wheels.
+         * Returns the largest absolute counts value out of both of the wheels
          * @return The largest counts value
          */
         public int getLargestMagnitude() {
-            return Math.max(Math.max(Math.abs(leftFront), Math.abs(leftBack)), Math.max(Math.abs(rightFront), Math.abs(rightBack)));
+            return Math.max(Math.abs(left), Math.abs(right));
         }
 
         /**
          * Creates a Counts object from a Coefficient object by multiplying the coefficients by the
-         * base counts.
+         * base counts
          * @param coefficients The coefficients to use to make the counts
          * @param baseCounts The base counts to multiply the coefficients by
          * @return A new Counts object with each wheel count being its coefficient * baseCounts
          */
         public static Counts fromCoefficients(Coefficients coefficients, int baseCounts) {
-            return new Counts((int) (coefficients.leftFront * baseCounts), (int) (coefficients.leftBack * baseCounts), (int) (coefficients.rightFront * baseCounts), (int) (coefficients.rightBack * baseCounts));
+            return new Counts((int) (coefficients.left * baseCounts), (int) (coefficients.right * baseCounts));
         }
 
         /**
-         * Converts the counts into the wheel coefficients of proportional sizes.
+         * Converts the counts into the wheel coefficients of proportional sizes
          * @return The converted coefficients
          */
         public Coefficients toCoefficient() {
             float magnitude = this.getLargestMagnitude();
             magnitude = magnitude == 0 ? 1 : magnitude;
             Coefficients coefficients = new Coefficients();
-            coefficients.leftFront = this.leftFront / magnitude;
-            coefficients.leftBack = this.leftBack / magnitude;
-            coefficients.rightFront = this.rightFront / magnitude;
-            coefficients.rightBack = this.rightBack / magnitude;
+            coefficients.left = this.left / magnitude;
+            coefficients.right = this.right / magnitude;
             return coefficients;
         }
 
@@ -288,80 +234,68 @@ public class MecanumEncoderWheels extends MecanumWheels implements EncoderWheels
             Coefficients coefficients = new Coefficients();
             float magnitude = this.getLargestMagnitude();
             if(baseCounts == 0 || magnitude == 0) {
-                coefficients.leftFront = 0f;
-                coefficients.leftBack = 0f;
-                coefficients.rightFront = 0f;
-                coefficients.rightBack = 0f;
+                coefficients.left = 0f;
+                coefficients.right = 0f;
             } else {
                 magnitude = magnitude > baseCounts ? magnitude : baseCounts;
-                coefficients.leftFront = this.leftFront / magnitude;
-                coefficients.leftBack = this.leftBack / magnitude;
-                coefficients.rightFront = this.rightFront / magnitude;
-                coefficients.rightBack = this.rightBack / magnitude;
+                coefficients.left = this.left / magnitude;
+                coefficients.right = this.right / magnitude;
             }
             return coefficients;
         }
 
         /**
-         * Gets the current encoder counts of the wheels.
+         * Gets the current encoder counts of the wheels
          * @param wheels The wheels to get the encoder counts
          * @return The current counts
          */
-        public static Counts fromPosition(MecanumEncoderWheels wheels) {
-            return new Counts(wheels.leftFront.getCurrentPosition(), wheels.leftBack.getCurrentPosition(), wheels.rightFront.getCurrentPosition(), wheels.rightBack.getCurrentPosition());
+        public static Counts fromPosition(TwoEncoderWheels wheels) {
+            return new Counts(wheels.left.getCurrentPosition(), wheels.right.getCurrentPosition());
         }
 
         /**
-         * Returns a new counts object which is the sum between this counts object and another.
+         * Returns a new counts object which is the sum between this counts object and another
          * @param other The counts to add to this
          * @return The new count values
          */
         public Counts added(Counts other) {
             return new Counts(
-                    this.leftFront + other.leftFront,
-                    this.leftBack + other.leftBack,
-                    this.rightFront + other.rightFront,
-                    this.rightBack + other.rightBack);
+                    this.left + other.left,
+                    this.right + other.right);
         }
 
 
         /**
-         * Updates the count values of this to be the sum between its and another's counts values.
+         * Updates the count values of this to be the sum between its and another's counts values
          * @param other The counts to add to this
          * @return These counts
          */
         public Counts add(Counts other) {
-            this.leftFront += other.leftFront;
-            this.leftBack += other.leftBack;
-            this.rightFront += other.rightFront;
-            this.rightBack += other.rightBack;
+            this.left += other.left;
+            this.right += other.right;
             return this;
         }
 
         /**
-         * Returns a new counts object which is the different between this counts object and another.
+         * Returns a new counts object which is the different between this counts object and another
          * @param other The counts to subtract from this
          * @return The new count values
          */
         public Counts subtracted(Counts other) {
             return new Counts(
-                    this.leftFront - other.leftFront,
-                    this.leftBack - other.leftBack,
-                    this.rightFront - other.rightFront,
-                    this.rightBack - other.rightBack);
+                    this.left - other.left,
+                    this.right - other.right);
         }
 
 
         /**
-         * Updates the count values of this to be the difference between its and another's counts values.
+         * Updates the count values of this to be the difference between its and another's counts values
          * @param other The counts to subtract from this
          * @return These counts
          */
         public Counts subtract(Counts other) {
-            this.leftFront -= other.leftFront;
-            this.leftBack -= other.leftBack;
-            this.rightFront -= other.rightFront;
-            this.rightBack -= other.rightBack;
+            this.left -= other.left;
+            this.right -= other.right;
             return this;
         }
 
@@ -372,10 +306,8 @@ public class MecanumEncoderWheels extends MecanumWheels implements EncoderWheels
          */
         public Counts negated() {
             return new Counts(
-                    -this.leftFront,
-                    -this.leftBack,
-                    -this.rightFront,
-                    -this.rightBack);
+                    -this.left,
+                    -this.right);
         }
 
         /**
@@ -384,10 +316,8 @@ public class MecanumEncoderWheels extends MecanumWheels implements EncoderWheels
          * @return These counts
          */
         public Counts negate() {
-            leftFront = -leftFront;
-            leftBack = -leftBack;
-            rightFront = -rightFront;
-            rightBack = -rightBack;
+            left = -left;
+            right = -right;
             return this;
         }
     }
@@ -415,12 +345,12 @@ public class MecanumEncoderWheels extends MecanumWheels implements EncoderWheels
         protected float calibrationMultiplier;
 
         /**
-         * Creates an new encoder configuration for a mecanum wheel movement type.
+         * Creates an new encoder configuration for a two wheel movement type.
          * @param countsPerRev The number of counts the encoders for the motor in use have per
          *                     revolution of the output shaft of the motor
          * @param wheelDiameter The diameter of the wheel which is being spun by the motor
          * @param robotDiameter The diameter of the robot, specifically being the distance between
-         *                      each pair of two wheels
+         *                      the two wheels
          * @param calibrationMultiplier A multiplier of what percentage of the correct distance the
          *                              wheels go on a calibration test, should be greater than 0 -
          *                              Defaults to 1f when omitted

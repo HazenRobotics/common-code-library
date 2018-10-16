@@ -9,6 +9,7 @@ import com.hazenrobotics.commoncode.models.conditions.Condition;
  * A means to control a robot's wheels and
  * @see EncoderWheels
  */
+@SuppressWarnings("unused")
 public interface Wheels {
     /**
      * Moves directly forward until a given condition is true without any turning

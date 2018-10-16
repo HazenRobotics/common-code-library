@@ -1,22 +1,17 @@
 package com.hazenrobotics.commoncode.movement;
 
-import android.support.annotation.NonNull;
-
-import com.hazenrobotics.commoncode.interfaces.HardwareInterface;
 import com.hazenrobotics.commoncode.interfaces.OpModeInterface;
 import com.hazenrobotics.commoncode.models.angles.Angle;
 import com.hazenrobotics.commoncode.models.angles.directions.RotationDirection;
 import com.hazenrobotics.commoncode.models.angles.directions.SimpleDirection;
 import com.hazenrobotics.commoncode.models.conditions.Condition;
-import com.qualcomm.robotcore.BuildConfig;
 import com.qualcomm.robotcore.hardware.DcMotor;
-
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 /**
  * Controller for Mecanum Wheels, which allow a bot to move in all directions and strafe
  * @see MecanumEncoderWheels
  */
+@SuppressWarnings("unused,WeakerAccess")
 public class MecanumWheels implements Wheels {
     protected OpModeInterface opModeInterface;
 
@@ -25,23 +20,24 @@ public class MecanumWheels implements Wheels {
     protected DcMotor leftBack;
     protected DcMotor rightBack;
 
-    protected static final float MOVE_SPEED = 0.5f;
-    protected static final float STRAFE_SPEED = 0.5f;
-    protected static final float TURN_SPEED = 0.3f;
-    protected static final AngleUnit DEFAULT_ANGLE_UNIT = AngleUnit.DEGREES;
+    protected SpeedSettings speeds;
+
     protected static final Coefficients ZEROED_COEFFICIENTS = new Coefficients(0f, 0f, 0f, 0f);
+    protected static final SpeedSettings DEFAULT_SPEEDS = new SpeedSettings(0.5f, 0.5f, 0.3f);
 
     /**
-     * Initializes the class to use the four wheels with the given configuration names
+     * Initializes the class to use the four wheels with the given configuration of names and speed
+     * settings.
      * @param opModeInterface An interface from which the wheel motors can be accessed
      * @param leftFrontName Name of the wheel in the robot configuration
      * @param leftBackName See above
      * @param rightFrontName See above
      * @param rightBackName See above
+     * @param speeds The speed settings to use for the different movement types
      */
-    public MecanumWheels(OpModeInterface opModeInterface, String leftFrontName, String leftBackName, String rightFrontName, String rightBackName) {
+    public MecanumWheels(OpModeInterface opModeInterface, String leftFrontName, String leftBackName, String rightFrontName, String rightBackName, SpeedSettings speeds) {
         this.opModeInterface = opModeInterface;
-        
+
         leftFront = this.opModeInterface.getMotor(leftFrontName);
         leftBack = this.opModeInterface.getMotor(leftBackName);
         rightFront = this.opModeInterface.getMotor(rightFrontName);
@@ -51,29 +47,37 @@ public class MecanumWheels implements Wheels {
         leftBack.setDirection(DcMotor.Direction.REVERSE);
         rightFront.setDirection(DcMotor.Direction.FORWARD);
         rightBack.setDirection(DcMotor.Direction.FORWARD);
+
+        this.speeds = speeds;
     }
 
     /**
-     * Initializes the class to use the four wheels with default configuration names
+     * Initializes the class to use the four wheels with the given configuration of names, keeping
+     * the default speed settings.
      * @param opModeInterface An interface from which the wheel motors can be accessed
+     * @param leftFrontName Name of the wheel in the robot configuration
+     * @param leftBackName See above
+     * @param rightFrontName See above
+     * @param rightBackName See above
      */
-    public MecanumWheels(OpModeInterface opModeInterface) {
-        this(opModeInterface, "leftFront", "leftBack", "rightFront", "rightBack");
+    public MecanumWheels(OpModeInterface opModeInterface, String leftFrontName, String leftBackName, String rightFrontName, String rightBackName) {
+        this(opModeInterface, leftFrontName, leftBackName, rightFrontName, rightBackName, DEFAULT_SPEEDS);
     }
 
     @Override
     public void move(Condition condition, SimpleDirection direction) {
-        move(condition, direction, MOVE_SPEED);
+        move(condition, direction, speeds.move);
     }
 
     /**
      * Moves directly forward until a given condition is true without any turning at a given speed
      * @param condition Will move until this condition is true
      * @param direction Determines if the wheels will move forward or backwards
-     * @param speed The percent of maximum speed which wheels will move at, must be between -1f and 1f
+     * @param speed The percent of maximum speed which wheels will move at, should be between 0f and
+     *              1f
      */
     public void move(Condition condition, SimpleDirection direction, float speed) {
-        runByCoefficients(condition, calculateMove(direction), speed);
+        runByCoefficients(condition, calculateMove(direction), Math.abs(speed));
     }
 
     /**
@@ -83,14 +87,12 @@ public class MecanumWheels implements Wheels {
      */
     public Coefficients calculateMove(SimpleDirection direction) {
         Coefficients coefficients = new Coefficients();
-
         //Moves forwards or backwards based on direction
         float coefficient = direction.equals(SimpleDirection.FORWARDS) ? 1f : -1f;
         coefficients.leftFront = coefficient;
         coefficients.leftBack = coefficient;
         coefficients.rightFront = coefficient;
         coefficients.rightBack = coefficient;
-
         return coefficients;
     }
 
@@ -100,17 +102,18 @@ public class MecanumWheels implements Wheels {
      * @param strafeAngle The angle which will be strafed towards
      */
     public void strafe(Condition condition, Angle strafeAngle) {
-        strafe(condition, strafeAngle, STRAFE_SPEED);
+        strafe(condition, strafeAngle, speeds.strafe);
     }
 
     /**
      * Strafes until a given condition is true at a given angle and speed
      * @param condition Will strafe until this condition is true
      * @param strafeAngle The angle which will be strafed towards given in the specified unit
-     * @param speed The percent of maximum speed which wheels will move at, must be between -1f and 1f
+     * @param speed The percent of maximum speed which wheels will move at, should be between 0f and
+     *              1f
      */
     public void strafe(Condition condition, Angle strafeAngle, float speed) {
-        runByCoefficients(condition, calculateStrafe(strafeAngle), speed);
+        runByCoefficients(condition, calculateStrafe(strafeAngle), Math.abs(speed));
     }
 
     /**
@@ -139,7 +142,7 @@ public class MecanumWheels implements Wheels {
 
     @Override
     public void turn(Condition condition, RotationDirection direction) {
-        turn(condition, direction, TURN_SPEED);
+        turn(condition, direction, speeds.turn);
     }
 
     /**
@@ -149,7 +152,7 @@ public class MecanumWheels implements Wheels {
      * @param speed The percent of maximum speed which wheels will turn at, must be between -1f and 1f
      */
     public void turn(Condition condition, RotationDirection direction, float speed) {
-        runByCoefficients(condition, calculateTurn(direction), speed);
+        runByCoefficients(condition, calculateTurn(direction), Math.abs(speed));
     }
 
 
@@ -160,8 +163,8 @@ public class MecanumWheels implements Wheels {
      */
     public Coefficients calculateTurn(RotationDirection direction) {
         //Makes one side or the other move backwards to turn left or right based on the angle
-        int leftCoefficient = direction.equals(RotationDirection.CLOCKWISE) ? 1 : -1;
-        int rightCoefficient = direction.equals(RotationDirection.CLOCKWISE) ? -1 : 1;
+        int leftCoefficient = direction == RotationDirection.CLOCKWISE ? 1 : -1;
+        int rightCoefficient = direction == RotationDirection.CLOCKWISE ? -1 : 1;
 
         Coefficients coefficients = new Coefficients();
         coefficients.leftFront = leftCoefficient;
@@ -178,11 +181,15 @@ public class MecanumWheels implements Wheels {
      * @param speed The speed at which the wheels will move
      */
     public void runByCoefficients(Condition condition, Coefficients coefficients, float speed) {
+        //If a negative speed was passed here, we are moving backwards overall
+        coefficients = speed < 0 ? coefficients.negated() : coefficients;
+        speed = Math.abs(speed);
+
         setPower(coefficients, speed);
         while (!condition.isTrue()) {
             opModeInterface.idle();
         }
-        setPower(ZEROED_COEFFICIENTS, speed);
+        stop();
     }
 
     /**
@@ -191,8 +198,8 @@ public class MecanumWheels implements Wheels {
      * @param speed The speed at which the wheels will move
      */
     public void setPower(Coefficients coefficients, float speed) {
-        if(BuildConfig.DEBUG)
-            assert Math.abs(speed) <= 1 : "Movement Speed must be between positive and negative 1";
+        //If the magnitude of speed is greater than 1, it reduces its magnitude to 1 so that the motor power is never set to over 1
+        speed = boundRange(speed);
         double magnitude = coefficients.getLargestMagnitude();
         magnitude = magnitude < 1 ? 1 : magnitude;
         leftFront.setPower(coefficients.leftFront * speed / magnitude);
@@ -206,6 +213,17 @@ public class MecanumWheels implements Wheels {
      */
     public void stop() {
         setPower(ZEROED_COEFFICIENTS, 1f);
+    }
+
+    /**
+     * Ensures that the given value is between -1 and 1.
+     * @param value the value to bound
+     * @return a float between -1 and 1, being -1 or 1 if the value was more or less than the range,
+     * and just the original value if it was not
+     */
+    private static float boundRange(float value) {
+        //If the magnitude is greater than 1, it reduces its magnitude to 1
+        return  Math.abs(value) > 1 ? (value > 0 ? 1: -1) : (value);
     }
 
     /**
@@ -240,9 +258,9 @@ public class MecanumWheels implements Wheels {
         /**
          * Creates a Coefficients object which holds coefficient values for the four different wheels
          * @param leftFrontCoefficient The coefficient for the front left wheel
-         * @param leftBackCoefficient The coefficient for the front left wheel
-         * @param rightFrontCoefficient The coefficient for the front left wheel
-         * @param rightBackCoefficient The coefficient for the front left wheel
+         * @param leftBackCoefficient The coefficient for the back left wheel
+         * @param rightFrontCoefficient The coefficient for the front right wheel
+         * @param rightBackCoefficient The coefficient for the back right wheel
          */
         public Coefficients(float leftFrontCoefficient, float leftBackCoefficient, float rightFrontCoefficient, float rightBackCoefficient) {
             this.leftFront = leftFrontCoefficient;
@@ -252,38 +270,62 @@ public class MecanumWheels implements Wheels {
         }
 
         /**
-         * Copies the values of the array to be the coefficient values of the different wheels in a Coefficients object
-         * 0th Index = Front Left
-         * 1st Index = Back Left
-         * 2nd Index = Front Right
-         * 3rd Index = Back Right
-         * @param coefficients The array from which to copy the different coefficient values; Must have a size of at least 4
-         */
-        @NonNull
-        public static Coefficients fromArray(float[] coefficients) {
-            if(BuildConfig.DEBUG)
-                assert coefficients.length >= 4 : "A wheel coefficients array must contain at least 4 values";
-            return new Coefficients(coefficients[0], coefficients[1], coefficients[2], coefficients[3]);
-        }
-
-        /**
-         * Makes a copy of the internal coefficient array which holds the coefficient values for the different wheels
-         * 0th Index = Front Left
-         * 1st Index = Back Left
-         * 2nd Index = Front Right
-         * 3rd Index = Back Right
-         * @return Returns a copy of the internal coefficients array, which has a length of 4
-         */
-        public float[] toArray() {
-            return new float[]{leftFront, leftBack, rightFront, rightBack};
-        }
-
-        /**
          * Returns the largest absolute coefficient value out of all of the wheels
          * @return The largest coefficient value
          */
         public double getLargestMagnitude() {
             return Math.max(Math.max(Math.abs(leftFront), Math.abs(leftBack)), Math.max(Math.abs(rightFront), Math.abs(rightBack)));
+        }
+
+        /**
+         * Updates the coefficients values of this with each of its coefficients values the opposite
+         * sign of their previous value.
+         * @return The new coefficient values
+         */
+        public Coefficients negated() {
+            return new Coefficients(
+                    -this.leftFront,
+                    -this.leftBack,
+                    -this.rightFront,
+                    -this.rightBack);
+        }
+
+        /**
+         * Returns a new coefficients object with each of its coefficient values the opposite sign
+         * of these coefficients.
+         * @return These coefficients
+         */
+        public Coefficients negate() {
+            leftFront = -leftFront;
+            leftBack = -leftBack;
+            rightFront = -rightFront;
+            rightBack = -rightBack;
+            return this;
+        }
+    }
+
+    /**
+     * Stores the speed settings the wheels will use when no others are specified.
+     * Speeds for moving, strafing, and turning can be specified
+     */
+    public static class SpeedSettings {
+        public float move;
+        public float strafe;
+        public float turn;
+
+        /**
+         * Initializes the different speed values with the given settings.
+         * @param moveSpeed The speed which the wheels will move at unless otherwise specified -
+         *                  Should be between 0 and 1
+         * @param strafeSpeed The speed which the wheels will strafe at unless otherwise specified -
+         *                  Should be between 0 and 1
+         * @param turnSpeed The speed which the wheels will turn at unless otherwise specified -
+         *                  Should be between 0 and 1
+         */
+        public SpeedSettings(float moveSpeed, float strafeSpeed, float turnSpeed) {
+            this.move = moveSpeed;
+            this.strafe = strafeSpeed;
+            this.turn = turnSpeed;
         }
     }
 }

@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
  * left-right strafing movement, and the x-axis on the right stick controls turning.
  * @see MecanumWheels
  */
+@SuppressWarnings("unused,WeakerAccess")
 public class StrafeTurnDrivingController implements DrivingController {
 
     protected Gamepad controller;
@@ -41,7 +42,7 @@ public class StrafeTurnDrivingController implements DrivingController {
      * @param maxSpeed The new max movement speed
      */
     public void setSpeed(float maxSpeed) {
-        this.speed = speed;
+        this.speed = maxSpeed;
     }
 
     @Override
