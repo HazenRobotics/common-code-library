@@ -5,7 +5,8 @@ import com.qualcomm.robotcore.hardware.I2cDevice;
 import com.qualcomm.robotcore.hardware.I2cDeviceSynch;
 import com.qualcomm.robotcore.hardware.I2cDeviceSynchImpl;
 
-public abstract class I2cSensor {
+@SuppressWarnings("unused,WeakerAccess")
+public abstract class I2cSensor  {
     protected I2cAddr address; //address in 7 bits
     protected byte[] cache; //storage of information
     protected I2cDevice sensorDevice; //legit sensor
@@ -23,7 +24,7 @@ public abstract class I2cSensor {
      */
     public void changeAddress(I2cAddr address) {
         this.address = address;
-        sensorReader.disengage();
+        if (sensorReader != null ) sensorReader.disengage();
         sensorReader = new I2cDeviceSynchImpl(sensorDevice, address, false);
         sensorReader.engage();
     }

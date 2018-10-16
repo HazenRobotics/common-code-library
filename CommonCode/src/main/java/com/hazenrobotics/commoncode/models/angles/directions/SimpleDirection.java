@@ -17,4 +17,12 @@ public enum SimpleDirection implements Direction {
     public Angle getAngle() {
         return angle;
     }
+
+    /**
+     * Gets the inverted direction (so Forwards would return Backwards and vise-versa.)
+     * @return The inverted direction of this
+     */
+    public SimpleDirection inverted() {
+        return this == FORWARDS ? BACKWARDS : FORWARDS;
+    }
 }

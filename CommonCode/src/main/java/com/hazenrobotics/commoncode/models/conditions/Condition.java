@@ -7,9 +7,19 @@ package com.hazenrobotics.commoncode.models.conditions;
  * @see Timer
  * @see GyroAngle
  */
+@SuppressWarnings("unused,WeakerAccess")
 public abstract class Condition {
-    private boolean wasTrue = false;
-    protected final boolean rememberTrue = true;
+    private boolean wasTrue;
+    private boolean rememberTrue;
+
+    public Condition() {
+        this(true);
+    }
+
+    public Condition(boolean rememberTrue) {
+        this.rememberTrue = rememberTrue;
+        wasTrue = false;
+    }
     /**
      * This abstract function can be overridden to allow a custom condition to be made
      * @return The result of the condition operation
@@ -21,11 +31,18 @@ public abstract class Condition {
      * @return If the condition is true/the object it in a true state
      */
     public boolean isTrue() {
+        /*
+        Equivalent to code below, only works because of || operator short-circuiting, where if the
+        first argument is true, the second is never checked (so therefore "wasTrue" is not updated.)
+         */
+        return wasTrue && rememberTrue || (wasTrue = condition());
+        /*
         if (wasTrue && rememberTrue) {
             return true;
         } else {
             wasTrue = condition();
             return wasTrue;
         }
+        */
     }
 }

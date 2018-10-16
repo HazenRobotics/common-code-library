@@ -48,7 +48,7 @@ public enum SensorColor implements NamedColorEnum {
     }
 
     /**
-     * Gets the color assosiated with a number. Can be used to convert an I2c sensor number into a
+     * Gets the color associated with a number. Can be used to convert an I2c sensor number into a
      * color
      * @param numeric The number of the color between 0 and 16
      * @return The color which has the specified numeric id. NULL color if the number was

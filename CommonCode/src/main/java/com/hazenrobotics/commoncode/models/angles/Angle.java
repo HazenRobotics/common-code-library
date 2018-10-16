@@ -1,5 +1,6 @@
 package com.hazenrobotics.commoncode.models.angles;
 
+@SuppressWarnings("unused,WeakerAccess")
 public class Angle {
     protected final float EQUIVALENCE_ERROR_RANGE = 0.0001f;
 
@@ -151,9 +152,27 @@ public class Angle {
         return this;
     }
 
+    public Angle multiplied(float multiplier) {
+        return new Angle(this.value * multiplier, this.unit);
+    }
+
+    public Angle multiply(float multiplier) {
+        this.value *= multiplier;
+        return this;
+    }
+
+    /**
+     * Divides this Angle by another and returns the result
+     * @param other The angle to divide this one by
+     * @return A float equal to the value of this angle divided by another
+     */
+    public float divided(Angle other) {
+        return this.value / other.getValue(this.unit);
+    }
+
     /**
      * Creates an angle whose value is the negative value of this angle
-     * @return A new negitive version angle with an unnormalized unit type
+     * @return A new negative version angle with an unnormalized unit type
      */
     public Angle negated() {
         return new Angle(-this.value, this.unit.getUnnormalized());
@@ -167,6 +186,46 @@ public class Angle {
         this.unnormalize();
         this.value = -this.value;
         return this;
+    }
+
+    /**
+     * Returns the the absolute value of the angle
+     * @return A new positive version of the angle with the same magnitude
+     */
+    public Angle abs() {
+        return positivized();
+    }
+
+    /**
+     * Creates a new angle of positive value with the same magnitude as this
+     * @return A new positive version of the angle with the same magnitude
+     */
+    public Angle positivized() {
+        return this.isPositive() ? new Angle(this) : this.negated();
+    }
+
+    /**
+     * Changes the angle to be a positive value with the same magnitude
+     * @return This with a positive value
+     */
+    public Angle positivize() {
+        return this.isPositive() ? this : this.negate();
+    }
+
+    /**
+     * Gives the current sign (positive or negative) of this angle.
+     * @return 1 if the the value is positive or zero, and -1 if the value is negative
+     */
+    public int getSign() {
+        return isPositive() ? -1 : 1;
+    }
+
+    /**
+     * Returns if this angle is positive (or zero.)
+     * @return true if the angle is greater than or equal to zero, false if it is not
+     */
+    public boolean isPositive() {
+        return value < 0;
     }
 
     public boolean isNormalized() {

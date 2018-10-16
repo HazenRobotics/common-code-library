@@ -2,6 +2,7 @@ package com.hazenrobotics.commoncode.models.distances;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
+@SuppressWarnings("unused,WeakerAccess")
 public class Distance {
     protected final float EQUIVALENCE_ERROR_RANGE = 0.0001f;
 
@@ -94,6 +95,24 @@ public class Distance {
         return this;
     }
 
+    public Distance multiplied(float multiplier) {
+        return new Distance(this.value * multiplier, this.unit);
+    }
+
+    public Distance multiply(float multiplier) {
+        this.value *= multiplier;
+        return this;
+    }
+
+    /**
+     * Divides this distance by another and returns the result
+     * @param other The distance to divide this one by
+     * @return A float equal to the value of this distance divided by another
+     */
+    public float divided(Distance other) {
+        return this.value / other.getValue(this.unit);
+    }
+
     public Distance negated() {
         return new Distance(-value, unit);
     }
@@ -102,6 +121,47 @@ public class Distance {
         value = -value;
         return this;
     }
+
+    /**
+     * Returns the the absolute value of the distance
+     * @return A new positive version of the distance with the same magnitude
+     */
+    public Distance abs() {
+        return positivized();
+    }
+
+    /**
+     * Creates a new distance of positive value with the same magnitude as this
+     * @return A new positive version of the distance with the same magnitude
+     */
+    public Distance positivized() {
+        return this.isPositive() ? new Distance(this) : this.negated();
+    }
+
+    /**
+     * Changes the distance to be a positive value with the same magnitude
+     * @return This with a positive value
+     */
+    public Distance positivize() {
+        return this.isPositive() ? this : this.negate();
+    }
+
+    /**
+     * Gives the current sign (positive or negative) of this distance.
+     * @return 1 if the the value is positive or zero, and -1 if the value is negative
+     */
+    public int getSign() {
+        return isPositive() ? -1 : 1;
+    }
+
+    /**
+     * Returns if this distance is positive (or zero.)
+     * @return true if the distance is greater than or equal to zero, false if it is not
+     */
+    public boolean isPositive() {
+        return value < 0;
+    }
+
 
     public boolean equals(Distance other) {
         return Math.abs(this.value - other.getValue(this.unit)) < EQUIVALENCE_ERROR_RANGE;
