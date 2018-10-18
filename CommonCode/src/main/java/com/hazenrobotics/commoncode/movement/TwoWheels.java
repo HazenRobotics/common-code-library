@@ -33,12 +33,16 @@ public class TwoWheels implements Wheels {
      * @param speeds The speed settings to use for the different movement types
      */
     public TwoWheels(OpModeInterface opModeInterface, String leftName, String rightName, SpeedSettings speeds) {
+        this(opModeInterface, leftName, rightName, DcMotor.Direction.FORWARD, DcMotor.Direction.REVERSE, speeds);
+    }
+    
+    public TwoWheels(OpModeInterface opModeInterface, String leftName, String rightName, SpeedSettings speeds, DcMotor.Direction leftDirection, DcMotor.Direction rightDirection) {
         this.opModeInterface = opModeInterface;
 
         left = opModeInterface.getMotor(leftName);
         right = opModeInterface.getMotor(rightName);
-        left.setDirection(DcMotor.Direction.FORWARD);
-        right.setDirection(DcMotor.Direction.REVERSE);
+        left.setDirection(leftDirection);
+        right.setDirection(rightDirection);
 
         this.speeds = speeds;
     }
