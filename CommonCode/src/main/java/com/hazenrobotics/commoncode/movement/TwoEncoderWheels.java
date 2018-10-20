@@ -8,6 +8,7 @@ import com.hazenrobotics.commoncode.models.angles.directions.SimpleDirection;
 import com.hazenrobotics.commoncode.models.conditions.Condition;
 import com.hazenrobotics.commoncode.models.distances.Distance;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
