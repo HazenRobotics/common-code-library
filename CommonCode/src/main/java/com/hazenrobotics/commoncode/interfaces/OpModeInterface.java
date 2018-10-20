@@ -1,5 +1,7 @@
 package com.hazenrobotics.commoncode.interfaces;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 /**
  * An interface for accessing the hardware, input, idling, and status of an OpMode.
  */
