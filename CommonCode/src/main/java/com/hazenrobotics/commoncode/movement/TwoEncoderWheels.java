@@ -162,7 +162,14 @@ public class TwoEncoderWheels extends TwoWheels implements EncoderWheels {
         right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         setPower(counts.toCoefficient(), speed);
-        while (left.isBusy() && right.isBusy()) {
+        while (left.isBusy() && right.isBusy() && opModeInterface.opModeIsActive()) {
+            opModeIsActive.getTelemetry().addData("Left Target", left.getTargetPosition());
+            opModeIsActive.getTelemetry().addData("Right Target", right.getTargetPosition());
+            opModeIsActive.getTelemetry().addData("Left Position", left.getCurrentPosition());
+            opModeIsActive.getTelemetry().addData("Right Position", right.getCurrentPosition());
+            opModeIsActive.getTelemetry().addData("Left Busy", left.isBusy());
+            opModeIsActive.getTelemetry().addData("Right Busy", right.isBusy());
+            opModeIsActive.getTelemetry().update();
             opModeInterface.idle();
         }
         stop();
