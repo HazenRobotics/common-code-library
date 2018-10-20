@@ -164,13 +164,13 @@ public class TwoEncoderWheels extends TwoWheels implements EncoderWheels {
 
         setPower(counts.toCoefficient(), speed);
         while (left.isBusy() && right.isBusy() && opModeInterface.opModeIsActive()) {
-            opModeIsActive.getTelemetry().addData("Left Target", left.getTargetPosition());
-            opModeIsActive.getTelemetry().addData("Right Target", right.getTargetPosition());
-            opModeIsActive.getTelemetry().addData("Left Position", left.getCurrentPosition());
-            opModeIsActive.getTelemetry().addData("Right Position", right.getCurrentPosition());
-            opModeIsActive.getTelemetry().addData("Left Busy", left.isBusy());
-            opModeIsActive.getTelemetry().addData("Right Busy", right.isBusy());
-            opModeIsActive.getTelemetry().update();
+            opModeInterface.getTelemetry().addData("Left Target", left.getTargetPosition());
+            opModeInterface.getTelemetry().addData("Right Target", right.getTargetPosition());
+            opModeInterface.getTelemetry().addData("Left Position", left.getCurrentPosition());
+            opModeInterface.getTelemetry().addData("Right Position", right.getCurrentPosition());
+            opModeInterface.getTelemetry().addData("Left Busy", left.isBusy());
+            opModeInterface.getTelemetry().addData("Right Busy", right.isBusy());
+            opModeInterface.getTelemetry().update();
             opModeInterface.idle();
         }
         stop();
