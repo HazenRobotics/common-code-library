@@ -22,7 +22,7 @@ public class TwoWheels implements Wheels {
     protected SpeedSettings speeds;
 
     protected static final Coefficients ZEROED_COEFFICIENTS = new Coefficients(0f, 0f);
-    protected static final SpeedSettings DEFAULT_SPEEDS = new SpeedSettings(0.7f, 0.5f, 0.3f);
+    public static final SpeedSettings DEFAULT_SPEEDS = new SpeedSettings(0.7f, 0.5f, 0.3f);
 
     /**
      * Initializes the class to use the two wheels with the given configuration of names and speed
@@ -33,7 +33,7 @@ public class TwoWheels implements Wheels {
      * @param speeds The speed settings to use for the different movement types
      */
     public TwoWheels(OpModeInterface opModeInterface, String leftName, String rightName, SpeedSettings speeds) {
-        this(opModeInterface, leftName, rightName, DcMotor.Direction.FORWARD, DcMotor.Direction.REVERSE, speeds);
+        this(opModeInterface, leftName, rightName, speeds, DcMotor.Direction.FORWARD, DcMotor.Direction.REVERSE);
     }
     
     public TwoWheels(OpModeInterface opModeInterface, String leftName, String rightName, SpeedSettings speeds, DcMotor.Direction leftDirection, DcMotor.Direction rightDirection) {
