@@ -10,4 +10,6 @@ public interface OpModeInterface extends HardwareInterface, GamepadInterface, Id
      * @return True if the OpMode is currently active, False if the OpMode needs to or is stopped.
      */
     boolean opModeIsActive();
+    
+    Telemetry getTelemetry();
 }
