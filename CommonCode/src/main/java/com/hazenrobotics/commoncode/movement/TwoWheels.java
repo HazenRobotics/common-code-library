@@ -173,7 +173,9 @@ public class TwoWheels implements Wheels {
         speed = Math.abs(speed);
 
         setPower(coefficients, speed);
-        while (!condition.isTrue()) {
+        while (!condition.isTrue() && opModeInterface.opModeIsActive()) {
+            opModeInterface.getTelemetry().addData("Condition", condition.isTrue());
+            opModeInterface.getTelemetry().update();
             opModeInterface.idle();
         }
         stop();

@@ -198,7 +198,20 @@ public class MecanumEncoderWheels extends MecanumWheels implements EncoderWheels
         rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         setPower(counts.toCoefficient(), Math.abs(speed));
-        while (leftFront.isBusy() && leftBack.isBusy() && rightFront.isBusy() && rightBack.isBusy()) {
+        while (leftFront.isBusy() && leftBack.isBusy() && rightFront.isBusy() && rightBack.isBusy() && opModeInterface.opModeIsActive()) {
+            opModeInterface.getTelemetry().addData("LeftFront Target", leftFront.getTargetPosition());
+            opModeInterface.getTelemetry().addData("LeftBack Target", leftBack.getTargetPosition());
+            opModeInterface.getTelemetry().addData("RightFront Target", rightFront.getTargetPosition());
+            opModeInterface.getTelemetry().addData("RightFront Target", rightBack.getTargetPosition());
+            opModeInterface.getTelemetry().addData("LeftFront Position", leftFront.getCurrentPosition());
+            opModeInterface.getTelemetry().addData("LeftBack Position", leftBack.getCurrentPosition());
+            opModeInterface.getTelemetry().addData("RightFront Position", rightFront.getCurrentPosition());
+            opModeInterface.getTelemetry().addData("RightBack Position", rightBack.getCurrentPosition());
+            opModeInterface.getTelemetry().addData("LeftFront Busy", leftFront.isBusy());
+            opModeInterface.getTelemetry().addData("LeftBack Busy", leftBack.isBusy());
+            opModeInterface.getTelemetry().addData("RightFront Busy", rightFront.isBusy());
+            opModeInterface.getTelemetry().addData("RightFront Busy", rightBack.isBusy());
+            opModeInterface.getTelemetry().update();
             opModeInterface.idle();
         }
         stop();
