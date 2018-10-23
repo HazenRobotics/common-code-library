@@ -6,6 +6,7 @@ import com.hazenrobotics.commoncode.models.angles.directions.SideDirection;
 import com.hazenrobotics.commoncode.models.angles.directions.SimpleDirection;
 import com.hazenrobotics.commoncode.models.conditions.Condition;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 /**
  * Controller for a basic Two-Wheels configuration (one on each side of the bot.) This allow a bot
@@ -28,21 +29,16 @@ public class TwoWheels implements Wheels {
      * Initializes the class to use the two wheels with the given configuration of names and speed
      * settings.
      * @param opModeInterface An interface from which the wheel motors can be accessed
-     * @param leftName Name of the left wheel in the robot configuration
-     * @param rightName Name of the right wheel in the robot configuration
+     * @param wheelConfig Specifies the settings for the wheels such as the name and direction
      * @param speeds The speed settings to use for the different movement types
      */
-    public TwoWheels(OpModeInterface opModeInterface, String leftName, String rightName, SpeedSettings speeds) {
-        this(opModeInterface, leftName, rightName, speeds, DcMotor.Direction.FORWARD, DcMotor.Direction.REVERSE);
-    }
-    
-    public TwoWheels(OpModeInterface opModeInterface, String leftName, String rightName, SpeedSettings speeds, DcMotor.Direction leftDirection, DcMotor.Direction rightDirection) {
+    public TwoWheels(OpModeInterface opModeInterface, WheelConfiguration wheelConfig, SpeedSettings speeds) {
         this.opModeInterface = opModeInterface;
 
-        left = opModeInterface.getMotor(leftName);
-        right = opModeInterface.getMotor(rightName);
-        left.setDirection(leftDirection);
-        right.setDirection(rightDirection);
+        left = opModeInterface.getMotor(wheelConfig.leftName);
+        right = opModeInterface.getMotor(wheelConfig.rightName);
+        left.setDirection(wheelConfig.leftDirection);
+        right.setDirection(wheelConfig.rightDirection);
 
         this.speeds = speeds;
     }
@@ -51,11 +47,10 @@ public class TwoWheels implements Wheels {
      * Initializes the class to use the two wheels with the given configuration of names, keeping the
      * default speed settings.
      * @param opModeInterface An interface from which the wheel motors can be accessed
-     * @param leftName Name of the left wheel in the robot configuration
-     * @param rightName Name of the right wheel in the robot configuration
+     * @param wheelConfig Specifies the settings for the wheels such as the name and direction
      */
-    public TwoWheels(OpModeInterface opModeInterface, String leftName, String rightName) {
-        this(opModeInterface, leftName, rightName, DEFAULT_SPEEDS);
+    public TwoWheels(OpModeInterface opModeInterface, WheelConfiguration wheelConfig) {
+        this(opModeInterface, wheelConfig, DEFAULT_SPEEDS);
     }
 
     @Override
@@ -291,6 +286,24 @@ public class TwoWheels implements Wheels {
             this.move = moveSpeed;
             this.curve = curveSpeed;
             this.turn = turnSpeed;
+        }
+    }
+
+    public static class WheelConfiguration {
+        protected final String leftName;
+        protected final String rightName;
+        protected final DcMotorSimple.Direction leftDirection;
+        protected final DcMotorSimple.Direction rightDirection;
+
+        public WheelConfiguration(String leftName, String rightName, DcMotorSimple.Direction leftDirection, DcMotorSimple.Direction rightDirection) {
+            this.leftName = leftName;
+            this.rightName = rightName;
+            this.leftDirection = leftDirection;
+            this.rightDirection = rightDirection;
+        }
+
+        public WheelConfiguration(String leftName, String rightName) {
+            this(leftName, rightName, DcMotorSimple.Direction.FORWARD, DcMotorSimple.Direction.REVERSE);
         }
     }
 }

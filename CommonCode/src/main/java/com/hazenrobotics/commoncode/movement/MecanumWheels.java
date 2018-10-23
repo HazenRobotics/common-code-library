@@ -6,6 +6,7 @@ import com.hazenrobotics.commoncode.models.angles.directions.RotationDirection;
 import com.hazenrobotics.commoncode.models.angles.directions.SimpleDirection;
 import com.hazenrobotics.commoncode.models.conditions.Condition;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 /**
  * Controller for Mecanum Wheels, which allow a bot to move in all directions and strafe
@@ -29,24 +30,21 @@ public class MecanumWheels implements Wheels {
      * Initializes the class to use the four wheels with the given configuration of names and speed
      * settings.
      * @param opModeInterface An interface from which the wheel motors can be accessed
-     * @param leftFrontName Name of the wheel in the robot configuration
-     * @param leftBackName See above
-     * @param rightFrontName See above
-     * @param rightBackName See above
+     * @param wheelConfig Specifies the settings for the wheels such as the name and direction
      * @param speeds The speed settings to use for the different movement types
      */
-    public MecanumWheels(OpModeInterface opModeInterface, String leftFrontName, String leftBackName, String rightFrontName, String rightBackName, SpeedSettings speeds) {
+    public MecanumWheels(OpModeInterface opModeInterface, WheelConfiguration wheelConfig, SpeedSettings speeds) {
         this.opModeInterface = opModeInterface;
 
-        leftFront = this.opModeInterface.getMotor(leftFrontName);
-        leftBack = this.opModeInterface.getMotor(leftBackName);
-        rightFront = this.opModeInterface.getMotor(rightFrontName);
-        rightBack = this.opModeInterface.getMotor(rightBackName);
+        leftFront = this.opModeInterface.getMotor(wheelConfig.leftFrontName);
+        leftBack = this.opModeInterface.getMotor(wheelConfig.leftBackName);
+        rightFront = this.opModeInterface.getMotor(wheelConfig.rightFrontName);
+        rightBack = this.opModeInterface.getMotor(wheelConfig.rightBackName);
 
-        leftFront.setDirection(DcMotor.Direction.REVERSE);
-        leftBack.setDirection(DcMotor.Direction.REVERSE);
-        rightFront.setDirection(DcMotor.Direction.FORWARD);
-        rightBack.setDirection(DcMotor.Direction.FORWARD);
+        leftFront.setDirection(wheelConfig.leftFrontDirection);
+        leftBack.setDirection(wheelConfig.leftBackDirection);
+        rightFront.setDirection(wheelConfig.rightFrontDirection);
+        rightBack.setDirection(wheelConfig.rightBackDirection);
 
         this.speeds = speeds;
     }
@@ -55,13 +53,10 @@ public class MecanumWheels implements Wheels {
      * Initializes the class to use the four wheels with the given configuration of names, keeping
      * the default speed settings.
      * @param opModeInterface An interface from which the wheel motors can be accessed
-     * @param leftFrontName Name of the wheel in the robot configuration
-     * @param leftBackName See above
-     * @param rightFrontName See above
-     * @param rightBackName See above
+     * @param wheelConfig Specifies the settings for the wheels such as the name and direction
      */
-    public MecanumWheels(OpModeInterface opModeInterface, String leftFrontName, String leftBackName, String rightFrontName, String rightBackName) {
-        this(opModeInterface, leftFrontName, leftBackName, rightFrontName, rightBackName, DEFAULT_SPEEDS);
+    public MecanumWheels(OpModeInterface opModeInterface, WheelConfiguration wheelConfig) {
+        this(opModeInterface, wheelConfig, DEFAULT_SPEEDS);
     }
 
     @Override
@@ -326,6 +321,33 @@ public class MecanumWheels implements Wheels {
             this.move = moveSpeed;
             this.strafe = strafeSpeed;
             this.turn = turnSpeed;
+        }
+    }
+
+    public static class WheelConfiguration {
+        protected final String leftFrontName;
+        protected final String leftBackName;
+        protected final String rightFrontName;
+        protected final String rightBackName;
+        protected final DcMotorSimple.Direction leftFrontDirection;
+        protected final DcMotorSimple.Direction leftBackDirection;
+        protected final DcMotorSimple.Direction rightFrontDirection;
+        protected final DcMotorSimple.Direction rightBackDirection;
+
+        public WheelConfiguration(String leftFrontName, String leftBackName, String rightFrontName, String rightBackName,
+                                  DcMotorSimple.Direction leftFrontDirection, DcMotorSimple.Direction leftBackDirection, DcMotorSimple.Direction rightFrontDirection, DcMotorSimple.Direction rightBackDirection) {
+            this.leftFrontName = leftFrontName;
+            this.leftBackName = leftBackName;
+            this.rightFrontName = rightFrontName;
+            this.rightBackName = rightBackName;
+            this.leftFrontDirection = leftFrontDirection;
+            this.leftBackDirection = leftBackDirection;
+            this.rightFrontDirection = rightFrontDirection;
+            this.rightBackDirection = rightBackDirection;
+        }
+
+        public WheelConfiguration(String leftFrontName, String leftBackName, String rightFrontName, String rightBackName) {
+            this(leftFrontName, leftBackName, rightFrontName, rightBackName, DcMotorSimple.Direction.REVERSE, DcMotorSimple.Direction.REVERSE, DcMotorSimple.Direction.FORWARD, DcMotorSimple.Direction.FORWARD);
         }
     }
 }

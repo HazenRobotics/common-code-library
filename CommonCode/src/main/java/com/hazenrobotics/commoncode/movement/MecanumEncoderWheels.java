@@ -29,16 +29,13 @@ public class MecanumEncoderWheels extends MecanumWheels implements EncoderWheels
      * Initializes the class to use the two wheels with the given configuration of names, speed, and
      * encoder settings.
      * @param opModeInterface An interface from which the wheel motors can be accessed
-     * @param leftFrontName Name of the wheel in the robot configuration
-     * @param leftBackName See above
-     * @param rightFrontName See above
-     * @param rightBackName See above
+     * @param wheelConfig Specifies the settings for the wheels such as the name and direction
      * @param encoderConfig A configuration of the robots wheels and dimensions in order to properly
      *                      use the encoders to calculate measured moves
      * @param speeds The speed settings to use for the different movement types
      */
-    public MecanumEncoderWheels(OpModeInterface opModeInterface, String leftFrontName, String leftBackName, String rightFrontName, String rightBackName, EncoderConfiguration encoderConfig, SpeedSettings speeds) {
-        super(opModeInterface, leftFrontName, leftBackName, rightFrontName, rightBackName, speeds);
+    public MecanumEncoderWheels(OpModeInterface opModeInterface, WheelConfiguration wheelConfig, EncoderConfiguration encoderConfig, SpeedSettings speeds) {
+        super(opModeInterface, wheelConfig, speeds);
         this.encoderConfig = encoderConfig;
     }
 
@@ -46,15 +43,12 @@ public class MecanumEncoderWheels extends MecanumWheels implements EncoderWheels
      * Initializes the class to use the two wheels with the given configuration of names and
      * encoder settings.
      * @param opModeInterface An interface from which the wheel motors can be accessed
-     * @param leftFrontName Name of the wheel in the robot configuration
-     * @param leftBackName See above
-     * @param rightFrontName See above
-     * @param rightBackName See above
+     * @param wheelConfig Specifies the settings for the wheels such as the name and direction
      * @param encoderConfig A configuration of the robots wheels and dimensions in order to properly
      *                      use the encoders to calculate measured moves
      */
-    public MecanumEncoderWheels(OpModeInterface opModeInterface, String leftFrontName, String leftBackName, String rightFrontName, String rightBackName,EncoderConfiguration encoderConfig) {
-        this(opModeInterface, leftFrontName, leftBackName, rightFrontName, rightBackName, encoderConfig, DEFAULT_SPEEDS);
+    public MecanumEncoderWheels(OpModeInterface opModeInterface, WheelConfiguration wheelConfig, EncoderConfiguration encoderConfig) {
+        this(opModeInterface, wheelConfig, encoderConfig, DEFAULT_SPEEDS);
     }
 
     @Override
