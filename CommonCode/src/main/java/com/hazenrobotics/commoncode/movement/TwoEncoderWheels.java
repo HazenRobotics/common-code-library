@@ -25,19 +25,17 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 public class TwoEncoderWheels extends TwoWheels implements EncoderWheels {
     protected EncoderConfiguration encoderConfig;
 
-
     /**
      * Initializes the class to use the two wheels with the given configuration of names, speed, and
      * encoder settings.
      * @param opModeInterface An interface from which the wheel motors can be accessed
-     * @param leftName Name of the left wheel in the robot configuration
-     * @param rightName Name of the right wheel in the robot configuration
+     * @param wheelConfig Specifies the settings for the wheels such as the name and direction
      * @param encoderConfig A configuration of the robots wheels and dimensions in order to properly
      *                      use the encoders to calculate measured moves
      * @param speeds The speed settings to use for the different movement types
      */
-    public TwoEncoderWheels(OpModeInterface opModeInterface, String leftName, String rightName, EncoderConfiguration encoderConfig, SpeedSettings speeds) {
-        super(opModeInterface, leftName, rightName, speeds);
+    public TwoEncoderWheels(OpModeInterface opModeInterface, WheelConfiguration wheelConfig, EncoderConfiguration encoderConfig, SpeedSettings speeds) {
+        super(opModeInterface, wheelConfig, speeds);
         this.encoderConfig = encoderConfig;
     }
 
@@ -45,11 +43,10 @@ public class TwoEncoderWheels extends TwoWheels implements EncoderWheels {
      * Initializes the class to use the two wheels with the given configuration of names and
      * encoder settings.
      * @param opModeInterface An interface from which the wheel motors can be accessed
-     * @param leftName Name of the left wheel in the robot configuration
-     * @param rightName Name of the right wheel in the robot configuration
+     * @param wheelConfig Specifies the settings for the wheels such as the name and direction
      */
-    public TwoEncoderWheels(OpModeInterface opModeInterface, String leftName, String rightName, EncoderConfiguration encoderConfig) {
-        this(opModeInterface, leftName, rightName, encoderConfig, DEFAULT_SPEEDS);
+    public TwoEncoderWheels(OpModeInterface opModeInterface, WheelConfiguration wheelConfig, EncoderConfiguration encoderConfig) {
+        this(opModeInterface, wheelConfig, encoderConfig, DEFAULT_SPEEDS);
     }
 
     @Override
