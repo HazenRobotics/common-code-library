@@ -38,6 +38,15 @@ public class TwoEncoderWheels extends TwoWheels implements EncoderWheels {
     public TwoEncoderWheels(OpModeInterface opModeInterface, WheelConfiguration wheelConfig, EncoderConfiguration encoderConfig, SpeedSettings speeds) {
         super(opModeInterface, wheelConfig, speeds);
         this.encoderConfig = encoderConfig;
+
+        left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        opModeInterface.sleep(10);
+        opModeInterface.idle();
+
+        left.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        right.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     /**
@@ -52,7 +61,7 @@ public class TwoEncoderWheels extends TwoWheels implements EncoderWheels {
 
     @Override
     public void move(Distance distance, SimpleDirection direction) {
-        move(distance, SimpleDirection.FORWARDS, speeds.move);
+        move(distance, direction, speeds.move);
     }
 
     /**
@@ -163,6 +172,8 @@ public class TwoEncoderWheels extends TwoWheels implements EncoderWheels {
         while (left.isBusy() && right.isBusy() && opModeInterface.opModeIsActive()) {
             opModeInterface.getTelemetry().addData("Left Target", left.getTargetPosition());
             opModeInterface.getTelemetry().addData("Right Target", right.getTargetPosition());
+            opModeInterface.getTelemetry().addData("Left Counts", counts.left);
+            opModeInterface.getTelemetry().addData("Right Counts", counts.right);
             opModeInterface.getTelemetry().addData("Left Position", left.getCurrentPosition());
             opModeInterface.getTelemetry().addData("Right Position", right.getCurrentPosition());
             opModeInterface.getTelemetry().addData("Left Busy", left.isBusy());
@@ -172,8 +183,8 @@ public class TwoEncoderWheels extends TwoWheels implements EncoderWheels {
         }
         stop();
 
-        left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        left.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        right.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     public static class Counts {

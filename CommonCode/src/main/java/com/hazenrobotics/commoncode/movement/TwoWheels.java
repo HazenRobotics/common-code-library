@@ -37,6 +37,10 @@ public class TwoWheels implements Wheels {
 
         left = opModeInterface.getMotor(wheelConfig.leftName);
         right = opModeInterface.getMotor(wheelConfig.rightName);
+
+        left.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        right.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
         left.setDirection(wheelConfig.leftDirection);
         right.setDirection(wheelConfig.rightDirection);
 
@@ -175,6 +179,8 @@ public class TwoWheels implements Wheels {
         setPower(coefficients, speed);
         while (!condition.isTrue() && opModeInterface.opModeIsActive()) {
             opModeInterface.getTelemetry().addData("Condition", condition.isTrue());
+            opModeInterface.getTelemetry().addData("Left Coefficient", coefficients.left);
+            opModeInterface.getTelemetry().addData("Right Coefficient", coefficients.right);
             opModeInterface.getTelemetry().update();
             opModeInterface.idle();
         }
@@ -209,7 +215,7 @@ public class TwoWheels implements Wheels {
      */
     private static float boundRange(float value) {
         //If the magnitude is greater than 1, it reduces its magnitude to 1
-        return  Math.abs(value) > 1 ? (value > 0 ? 1: -1) : (value);
+        return Math.abs(value) > 1 ? (value > 0 ? 1: -1) : (value);
     }
 
     /** Stores relative power values of different wheels for movement. */

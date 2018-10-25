@@ -151,7 +151,7 @@ public class Distance {
      * @return 1 if the the value is positive or zero, and -1 if the value is negative
      */
     public int getSign() {
-        return isPositive() ? -1 : 1;
+        return isPositive() ? 1 : -1;
     }
 
     /**
@@ -159,7 +159,7 @@ public class Distance {
      * @return true if the distance is greater than or equal to zero, false if it is not
      */
     public boolean isPositive() {
-        return value < 0;
+        return value > 0;
     }
 
 

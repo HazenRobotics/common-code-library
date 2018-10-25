@@ -41,6 +41,11 @@ public class MecanumWheels implements Wheels {
         rightFront = this.opModeInterface.getMotor(wheelConfig.rightFrontName);
         rightBack = this.opModeInterface.getMotor(wheelConfig.rightBackName);
 
+        leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
         leftFront.setDirection(wheelConfig.leftFrontDirection);
         leftBack.setDirection(wheelConfig.leftBackDirection);
         rightFront.setDirection(wheelConfig.rightFrontDirection);

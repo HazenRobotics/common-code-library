@@ -217,7 +217,7 @@ public class Angle {
      * @return 1 if the the value is positive or zero, and -1 if the value is negative
      */
     public int getSign() {
-        return isPositive() ? -1 : 1;
+        return isPositive() ? 1 : -1;
     }
 
     /**
@@ -225,7 +225,7 @@ public class Angle {
      * @return true if the angle is greater than or equal to zero, false if it is not
      */
     public boolean isPositive() {
-        return value < 0;
+        return value > 0;
     }
 
     public boolean isNormalized() {
