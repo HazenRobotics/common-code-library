@@ -49,9 +49,9 @@ public class I2cGyroSensor extends I2cSensor {
      * @see I2cGyroSensor#getIntegratedZ()
      * @see I2cGyroSensor#getIntegratedZValue(AngleUnit)
      */
-    public short getIntegratedZValue() {
+    public int getIntegratedZValue() {
         cache = sensorReader.read(INTEGRATED_Z_REG_START, GYRO_READ_LENGTH);
-        return TypeConversion.byteArrayToShort(cache, ByteOrder.LITTLE_ENDIAN);
+        return TypeConversion.byteArrayToInt(cache, ByteOrder.LITTLE_ENDIAN);
     }
 
     /**
@@ -94,9 +94,9 @@ public class I2cGyroSensor extends I2cSensor {
      * degrees
      * @return The heading value of the gyroDevice in degrees, between 0 and 359
      */
-    public short getHeadingValue() {
+    public int getHeadingValue() {
         cache = sensorReader.read(HEADING_REG_START, GYRO_READ_LENGTH);
-        return TypeConversion.byteArrayToShort(cache, ByteOrder.LITTLE_ENDIAN);
+        return TypeConversion.byteArrayToInt(cache, ByteOrder.LITTLE_ENDIAN);
     }
 
     /**
