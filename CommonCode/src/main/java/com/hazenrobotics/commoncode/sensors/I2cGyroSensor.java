@@ -15,7 +15,7 @@ import java.nio.ByteOrder;
  */
 public class I2cGyroSensor extends I2cSensor {
     protected static final int DEFAULT_ADDRESS = 0x20;
-    protected static final int HEADING_REG_START = 0x0;
+    protected static final int HEADING_REG_START = 0x04;
     protected static final int INTEGRATED_Z_REG_START = 0x06;
     protected static final int GYRO_READ_LENGTH = 2;
     protected static final int CALIBRATE_REG_START = 0x4E;
