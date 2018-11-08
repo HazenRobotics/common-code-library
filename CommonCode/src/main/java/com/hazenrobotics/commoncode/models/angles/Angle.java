@@ -94,7 +94,7 @@ public class Angle {
     public Angle set(float newValue, AngleUnit newUnit) {
         this.unit = newUnit;
         isNormalized = this.unit instanceof NormalizedAngleUnit;
-        this.value = this.unit.normalize(newValue);
+        this.value = isNormalized ? this.unit.normalize(newValue) : newValue;
         return this;
     }
 
