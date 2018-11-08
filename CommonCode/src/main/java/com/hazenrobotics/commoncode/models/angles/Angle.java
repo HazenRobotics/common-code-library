@@ -304,6 +304,10 @@ public class Angle {
     public boolean isLessOrEquals(Angle other) {
         return this.equals(other) || this.isLess(other);
     }
-
+    
+    @Override
+    public String toString() {
+        return value + " " + unit;
+    }
 
 }
