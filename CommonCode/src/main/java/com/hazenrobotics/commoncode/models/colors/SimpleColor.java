@@ -1,6 +1,6 @@
 package com.hazenrobotics.commoncode.models.colors;
 
-public enum SimpleColor implements NamedColorEnum {
+public enum SimpleColor implements NamedColor {
     BLACK(new Color(0, 0, 0)),
     WHITE(new Color(255, 255, 255)),
     RED(new Color(255, 0, 0)),

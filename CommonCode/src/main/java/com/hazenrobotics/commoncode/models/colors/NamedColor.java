@@ -1,6 +1,6 @@
 package com.hazenrobotics.commoncode.models.colors;
 
-public interface NamedColorEnum {
+public interface NamedColor {
     /**
      * Gets the color of this named color
      * @return The color object the named color represents

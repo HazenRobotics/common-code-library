@@ -8,7 +8,8 @@ import com.qualcomm.robotcore.hardware.I2cDevice;
  * An I2c color sensor object which can determine a {@link #getColor() color} being sensor and detect
  * the red, green, blue, and white values being seen.
  */
-public class I2cColorSensor extends I2cSensor {
+@SuppressWarnings("unused,WeakerAccess")
+public class I2cColorSensor extends I2cSensor implements ColorSensor<SensorColor> {
     protected static final int DEFAULT_ADDRESS = 0x3c;
     protected static final int COLOR_REG_START = 0x04; //Register to start reading
     protected static final int COLOR_READ_LENGTH = 1; //Number of byte to read
@@ -71,6 +72,7 @@ public class I2cColorSensor extends I2cSensor {
      * Determines the color the sensor is currently seeing
      * @return Returns one of 17 different types of named sensor color
      */
+    @Override
     public SensorColor getColor() {
         return SensorColor.getByNumber(getColorValue());
     }

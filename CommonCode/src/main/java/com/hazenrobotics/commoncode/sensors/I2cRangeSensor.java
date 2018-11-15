@@ -10,19 +10,27 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
  * An I2c range sensor object which can determine the distance to an object in front of it in various
  * units using either ultrasonic or optical sensing.
  */
-public class I2cRangeSensor extends I2cSensor {
+@SuppressWarnings("unused,WeakerAccess")
+public class I2cRangeSensor extends I2cSensor implements RangeSensor {
+    protected static final DistanceMode DEFAULT_DISTANCE_MODE = DistanceMode.ULTRASONIC;
+    protected DistanceMode mode;
     protected static final int DEFAULT_ADDRESS = 0x28;
     protected static final int RANGE_REG_START = 0x04; //Register to start reading
     protected static final int RANGE_READ_LENGTH = 2; //Number of byte to read
     protected static final DistanceUnit SENSOR_DISTANCE_UNIT = DistanceUnit.CM;
     protected static final DistanceUnit DEFAULT_DISTANCE_RETURN_UNIT = DistanceUnit.INCH;
 
+    @Override
+    public Distance getRange() {
+        return (mode == DistanceMode.ULTRASONIC ? getUltrasonic() : getOptical());
+    }
+
     /**
      * Creates a sensor with an address of {@link #DEFAULT_ADDRESS}
      * @param sensorDevice The sensor object on the hardware map to be used
      */
     public I2cRangeSensor(I2cDevice sensorDevice) {
-        super(sensorDevice, I2cAddr.create8bit(DEFAULT_ADDRESS));
+        this(sensorDevice, I2cAddr.create8bit(DEFAULT_ADDRESS));
     }
 
     /**
@@ -32,6 +40,7 @@ public class I2cRangeSensor extends I2cSensor {
      */
     public I2cRangeSensor(I2cDevice sensorDevice, I2cAddr address) {
         super(sensorDevice, address);
+        mode = DEFAULT_DISTANCE_MODE;
     }
 
     /**
@@ -100,5 +109,14 @@ public class I2cRangeSensor extends I2cSensor {
      */
     public Distance getOptical(DistanceUnit returnUnit) {
         return new Distance(getOpticalValue(returnUnit), returnUnit);
+    }
+
+    public void setDistanceMode(DistanceMode mode) {
+        this.mode = mode;
+    }
+
+    public enum DistanceMode {
+        ULTRASONIC,
+        OPTICAL
     }
 }

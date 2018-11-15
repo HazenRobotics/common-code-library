@@ -56,7 +56,7 @@ public class Color {
      * @param namedColor The named color to compare to
      * @return If the RGB values of this color and the named color are the same
      */
-    public boolean equals(NamedColorEnum namedColor) {
+    public boolean equals(NamedColor namedColor) {
         return this.equals(namedColor.getColor());
     }
 
@@ -65,7 +65,7 @@ public class Color {
      * @param namedColor The named color to compare to
      * @return If the colors' differences were less than the {@link #DEFAULT_MAX_DIFFERENCE default max difference}
      */
-    public boolean approximatelyEquals(NamedColorEnum namedColor) {
+    public boolean approximatelyEquals(NamedColor namedColor) {
         return approximatelyEquals(namedColor.getColor());
     }
 
@@ -75,7 +75,7 @@ public class Color {
      * @param maxDifference The maximum difference between the two colors
      * @return If the colors' differences were less than the max difference
      */
-    public boolean approximatelyEquals(NamedColorEnum colorEnum, int maxDifference) {
+    public boolean approximatelyEquals(NamedColor colorEnum, int maxDifference) {
         return approximatelyEquals(colorEnum.getColor(), maxDifference);
     }
 

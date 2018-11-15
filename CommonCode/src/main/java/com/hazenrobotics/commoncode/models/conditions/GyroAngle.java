@@ -4,6 +4,7 @@ import com.hazenrobotics.commoncode.models.angles.Angle;
 import com.hazenrobotics.commoncode.models.angles.AngleUnit;
 import com.hazenrobotics.commoncode.models.angles.directions.RotationDirection;
 import com.hazenrobotics.commoncode.models.angles.UnnormalizedAngleUnit;
+import com.hazenrobotics.commoncode.sensors.GyroSensor;
 import com.hazenrobotics.commoncode.sensors.I2cGyroSensor;
 
 /**
@@ -12,9 +13,8 @@ import com.hazenrobotics.commoncode.sensors.I2cGyroSensor;
  */
 public class GyroAngle extends Condition {
     protected final Angle targetAngle;
-    protected final I2cGyroSensor gyroSensor;
+    protected final GyroSensor gyroSensor;
     protected final RotationDirection direction;
-    protected final UnnormalizedAngleUnit DEFAULT_ANGLE_UNIT = UnnormalizedAngleUnit.DEGREES;
 
     /**
      * Creates a GyroTurn condition that turns the specified angle in degrees in either the clockwise
@@ -35,39 +35,30 @@ public class GyroAngle extends Condition {
      * @param direction The direction of turning the condition is meant for
      * @param absoluteHeading If an absolute or relative angle heading will be used
      */
-    public GyroAngle(Angle angle, I2cGyroSensor gyroSensor, RotationDirection direction, boolean absoluteHeading) {
+    public GyroAngle(Angle angle, GyroSensor gyroSensor, RotationDirection direction, boolean absoluteHeading) {
         this.gyroSensor = gyroSensor;
         this.direction = direction;
         boolean goingClockwise = direction.equals(RotationDirection.CLOCKWISE);
         if (absoluteHeading) {
-            Angle heading = gyroSensor.getHeading(DEFAULT_ANGLE_UNIT);
+            Angle heading = gyroSensor.getHeading();
             Angle deltaAngle = (goingClockwise ?
                     (heading.isGreater(angle.normalized())) : (heading.isLess(angle.normalized()))) //If ahead of where the angle is (for whichever direction we are going)
                     ? new Angle(360f, UnnormalizedAngleUnit.DEGREES)                          //Then add 360 to do one circle around,
                     : new Angle(0f, UnnormalizedAngleUnit.DEGREES)                            //Otherwise start with no rotation
                     .subtracted(heading.subtracted(angle));                                         //and subtract the difference in angle to hit the spot behind the current position if ahead of it,
             //or move forward the difference if it is in front of the current position
-            this.targetAngle = gyroSensor.getIntegratedZ(DEFAULT_ANGLE_UNIT).added(goingClockwise ? deltaAngle : deltaAngle.negated());
+            this.targetAngle = gyroSensor.getIntegratedZ().added(goingClockwise ? deltaAngle : deltaAngle.negated());
         } else {
-            this.targetAngle = gyroSensor.getIntegratedZ(DEFAULT_ANGLE_UNIT).added(goingClockwise ? angle : angle.negated());
+            this.targetAngle = gyroSensor.getIntegratedZ().added(goingClockwise ? angle : angle.negated());
         }
     }
 
     /**
      * Returns the target angle threshold for the condition to be true
-     * @return The target angle of the {@link #DEFAULT_ANGLE_UNIT} type
+     * @return The target angle
      */
     public Angle getTargetAngle() {
         return new Angle(targetAngle); //Return as copy so that target angle cant be modified
-    }
-
-    /**
-     * Returns the target angle threshold for the condition to be true
-     * @param returnUnit The unit type of the angle to be returned
-     * @return The target angle in the specified unit type
-     */
-    public Angle getTargetAngle(AngleUnit returnUnit) {
-        return targetAngle.asUnit(returnUnit);
     }
 
     /**
@@ -81,19 +72,10 @@ public class GyroAngle extends Condition {
 
     /**
      * Returns the target heading angle threshold for the condition to be true
-     * @return The target heading in the condition's {@link #DEFAULT_ANGLE_UNIT} type
+     * @return The target heading
      */
     public Angle getTargetHeading() {
         return targetAngle.normalized();
-    }
-
-    /**
-     * Returns the target heading angle threshold for the condition to be true
-     * @param returnUnit The unit type of the angle to be returned
-     * @return The target heading in the specified unit type
-     */
-    public Angle getTargetHeading(AngleUnit returnUnit) {
-        return targetAngle.asUnit(returnUnit).normalize();
     }
 
     /**
@@ -107,20 +89,10 @@ public class GyroAngle extends Condition {
 
     /**
      * Returns the angle remaining to reach the target angle
-     * @return The change in angle left in the condition's {{@link #DEFAULT_ANGLE_UNIT} type
+     * @return The change in angle left
      */
     public Angle getAngleRemaining() {
-        return targetAngle.subtracted(gyroSensor.getIntegratedZ(DEFAULT_ANGLE_UNIT));
-    }
-
-
-    /**
-     * Returns the angle remaining to reach the target angle
-     * @param returnUnit The unit type for the angle value to be returned as
-     * @return The change in angle left in the condition's {{@link #DEFAULT_ANGLE_UNIT} type
-     */
-    public Angle getAngleRemaining(AngleUnit returnUnit) {
-        return targetAngle.subtracted(gyroSensor.getIntegratedZ(returnUnit));
+        return targetAngle.subtracted(gyroSensor.getIntegratedZ());
     }
 
     /**

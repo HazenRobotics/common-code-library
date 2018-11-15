@@ -13,7 +13,8 @@ import java.nio.ByteOrder;
  * An I2c gyro sensor object which can determine its normalized and summative heading compared to
  * when it was last {@link #calibrate() calibrated}
  */
-public class I2cGyroSensor extends I2cSensor {
+@SuppressWarnings("unused,WeakerAccess")
+public class I2cGyroSensor extends I2cSensor implements GyroSensor {
     protected static final int DEFAULT_ADDRESS = 0x20;
     protected static final int HEADING_REG_START = 0x04;
     protected static final int INTEGRATED_Z_REG_START = 0x06;
@@ -66,13 +67,7 @@ public class I2cGyroSensor extends I2cSensor {
         return returnUnit.fromUnit(SENSOR_ANGLE_UNIT, getIntegratedZValue());
     }
 
-    /**
-     * Gets the current integrated Z value held by the sensor, which counts up or down as you rotate,
-     * as an Angle
-     * @return The Integrated Z value as an Angle in the
-     * {@link I2cGyroSensor#DEFAULT_ANGLE_RETURN_UNIT Default Return Unit}.
-     * @see I2cGyroSensor#getIntegratedZ(AngleUnit)
-     */
+    @Override
     public Angle getIntegratedZ() {
         return getIntegratedZ(DEFAULT_ANGLE_RETURN_UNIT);
     }
@@ -111,14 +106,7 @@ public class I2cGyroSensor extends I2cSensor {
         return returnUnit.fromUnit(SENSOR_ANGLE_UNIT.getNormalized(), getHeadingValue());
     }
 
-    /**
-     * Gets the current heading value held by the sensor, which loops back to 0 after you make one
-     * full rotation, as an Angle
-     * @return The Heading value as an Angle in the
-     * {@link I2cGyroSensor#DEFAULT_ANGLE_RETURN_UNIT Default Return Unit}.
-     * @see I2cGyroSensor#getHeading(AngleUnit)
-     * @see I2cGyroSensor#getHeadingValue(AngleUnit)
-     */
+    @Override
     public Angle getHeading() {
         return getHeading(DEFAULT_ANGLE_RETURN_UNIT);
     }
@@ -135,26 +123,17 @@ public class I2cGyroSensor extends I2cSensor {
     public Angle getHeading(AngleUnit returnUnit) {
         return new Angle(getHeadingValue(returnUnit), returnUnit);
     }
-
-    /**
-     * Calibrates the Gyro, which may take some time to fully complete; consider checking {@link #isCalibrating()}
-     * after.
-     */
+    @Override
     public void calibrate() {
         sensorReader.write8(COMMAND_REG_START, CALIBRATE_REG_START);
     }
 
-    /**
-     * Resets the Gyro's Z heading to zero
-     */
+    @Override
     public void resetHeading() {
         sensorReader.write8(COMMAND_REG_START, RESET_HEADING_REG_START);
     }
 
-    /**
-     * Checks if the gyroDevice is still calibrating, either by a full calibration or heading reset
-     * @return If the Gyro is currently calibrating
-     */
+    @Override
     public boolean isCalibrating() {
         return sensorReader.read(COMMAND_REG_START, 1)[0] != 0x00;
     }

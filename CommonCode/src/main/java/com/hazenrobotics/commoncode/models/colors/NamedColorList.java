@@ -8,7 +8,7 @@ import java.util.List;
  * the list.
  */
 public class NamedColorList {
-    protected List<NamedColorEnum> colors;
+    protected List<NamedColor> colors;
 
     /**
      * Initializes a new color list
@@ -21,7 +21,7 @@ public class NamedColorList {
      * Adds a color name to the list
      * @param namedColor The color to add to the list
      */
-    public void addColor(NamedColorEnum namedColor) {
+    public void addColor(NamedColor namedColor) {
         colors.add(namedColor);
     }
 
@@ -45,7 +45,7 @@ public class NamedColorList {
      * @param color The color to check for on the list
      * @return If the color is on the list
      */
-    public boolean contains(NamedColorEnum color) {
+    public boolean contains(NamedColor color) {
         return colors.contains(color);
     }
 }

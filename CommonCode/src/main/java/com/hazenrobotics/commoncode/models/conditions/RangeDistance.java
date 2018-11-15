@@ -2,6 +2,7 @@ package com.hazenrobotics.commoncode.models.conditions;
 
 import com.hazenrobotics.commoncode.models.distances.Distance;
 import com.hazenrobotics.commoncode.sensors.I2cRangeSensor;
+import com.hazenrobotics.commoncode.sensors.RangeSensor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
@@ -10,7 +11,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
  */
 public class RangeDistance extends Condition {
     protected final Distance distance;
-    protected final I2cRangeSensor rangeSensor;
+    protected final RangeSensor rangeSensor;
     protected final boolean moveGreater;
 
     /**
@@ -19,7 +20,7 @@ public class RangeDistance extends Condition {
      * @param rangeSensor The range sensor which will be used to check the condition
      * @param moveGreater If the condition will be true when the sensor reads greater than the target distance, or less than
      */
-    public RangeDistance(Distance distance, I2cRangeSensor rangeSensor, boolean moveGreater) {
+    public RangeDistance(Distance distance, RangeSensor rangeSensor, boolean moveGreater) {
         this.distance = distance;
         this.rangeSensor = rangeSensor;
         this.moveGreater = moveGreater;
@@ -31,15 +32,6 @@ public class RangeDistance extends Condition {
      */
     public Distance getTargetDistance() {
         return distance;
-    }
-
-    /**
-     * Returns the target distance threshold for the condition to be true
-     * @param returnUnit The unit type for the distance to be returned in
-     * @return The target distance
-     */
-    public Distance getTargetDistance(DistanceUnit returnUnit) {
-        return distance.asUnit(returnUnit);
     }
 
     /**
@@ -56,16 +48,7 @@ public class RangeDistance extends Condition {
      * @return The distance remaining
      */
     public Distance getDistanceRemaining() {
-        return distance.subtracted(rangeSensor.getUltrasonic());
-    }
-
-    /**
-     * Returns the distance remaining to pass the target threshold
-     * @param returnUnit The unit type for the distance to be returned in
-     * @return The distance remaining
-     */
-    public Distance getDistanceRemaining(DistanceUnit returnUnit) {
-        return getDistanceRemaining().changeUnit(returnUnit);
+        return distance.subtracted(rangeSensor.getRange());
     }
 
     /**
@@ -83,7 +66,7 @@ public class RangeDistance extends Condition {
      */
     @Override
     protected boolean condition() {
-        Distance currentDistance = rangeSensor.getUltrasonic();
+        Distance currentDistance = rangeSensor.getRange();
         return moveGreater ? currentDistance.isGreaterOrEquals(distance) : currentDistance.isLessOrEquals(distance);
     }
 }
