@@ -38,6 +38,15 @@ public class I2cColorSensor extends I2cSensor implements ColorSensor<SensorColor
         super(sensorDevice, address);
     }
 
+    /**
+     * Creates a sensor with the given address
+     * @param address The address which references the given sensor
+     * @param sensorDevice The sensor object on the hardware map to be used
+     */
+    public I2cColorSensor(I2cDevice sensorDevice, int address) {
+        this(sensorDevice, I2cAddr.create8bit(address));
+    }
+
     //returns color
     //key:
     /* 0 - black

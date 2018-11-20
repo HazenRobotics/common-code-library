@@ -8,12 +8,12 @@ public class ColorMatch extends Condition {
     protected ColorSensor colorSensor;
     protected NamedColorList colorList;
 
-    ColorMatch(ColorSensor colorSensor, NamedColorList colorList) {
+    public ColorMatch(ColorSensor colorSensor, NamedColorList colorList) {
         this.colorSensor = colorSensor;
         this.colorList = colorList;
     }
 
-    ColorMatch(ColorSensor colorSensor, NamedColor... colorList) {
+    public ColorMatch(ColorSensor colorSensor, NamedColor... colorList) {
         this(colorSensor, new NamedColorList());
         for(NamedColor color : colorList) {
             this.colorList.addColor(color);

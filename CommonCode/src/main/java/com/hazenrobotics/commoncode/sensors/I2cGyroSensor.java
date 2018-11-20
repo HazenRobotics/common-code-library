@@ -41,6 +41,15 @@ public class I2cGyroSensor extends I2cSensor implements GyroSensor {
         super(sensorDevice, address);
     }
 
+
+    /**
+     * Creates a sensor with the given address
+     * @param address The address which references the given sensor
+     * @param sensorDevice The sensor object on the hardware map to be used
+     */
+    public I2cGyroSensor(I2cDevice sensorDevice, int address) {
+        this(sensorDevice, I2cAddr.create8bit(address));
+    }
     /**
      * Gets the current integrated Z value held by the sensor, which counts up or down as you
      * rotate.

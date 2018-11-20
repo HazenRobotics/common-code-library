@@ -12,11 +12,11 @@ public class InterfaceGyro implements GyroSensor {
     protected ModernRoboticsI2cGyro internalGyro;
     protected static AngleUnit INTERNAL_ANGLE_UNIT = UnnormalizedAngleUnit.DEGREES;
 
-    InterfaceGyro(ModernRoboticsI2cGyro internalGyro) {
+    public InterfaceGyro(ModernRoboticsI2cGyro internalGyro) {
         this.internalGyro = internalGyro;
     }
 
-    InterfaceGyro(HardwareInterface hardwareInterface, String gyroName) {
+    public InterfaceGyro(HardwareInterface hardwareInterface, String gyroName) {
         HardwareDevice device = hardwareInterface.get(gyroName);
         if (device == null || !(device instanceof ModernRoboticsI2cGyro))
             throw new IllegalArgumentException("A Modern Robotics Gyro called \"" + gyroName + "\" does not exist");

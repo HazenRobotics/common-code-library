@@ -194,4 +194,9 @@ public class Distance {
     public boolean isLessOrEquals(Distance other) {
         return this.equals(other) || this.isLess(other);
     }
+
+    @Override
+    public String toString() {
+        return value + " " + unit;
+    }
 }

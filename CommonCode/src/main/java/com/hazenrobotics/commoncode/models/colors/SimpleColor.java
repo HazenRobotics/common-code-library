@@ -7,7 +7,7 @@ public enum SimpleColor implements NamedColor {
     GREEN(new Color(0, 255, 0)),
     BLUE(new Color(0, 0, 255));
 
-    Color color;
+    protected Color color;
 
     SimpleColor(Color color) {
         this.color = color;

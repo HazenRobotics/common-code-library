@@ -23,7 +23,7 @@ public class GyroAngle extends Condition {
      * @param gyroSensor The gyroDevice sensor which will be used to check the condition
      * @param direction The direction of turning the condition is meant for
      */
-    public GyroAngle(Angle angle, I2cGyroSensor gyroSensor, RotationDirection direction) {
+    public GyroAngle(Angle angle, GyroSensor gyroSensor, RotationDirection direction) {
         this(angle, gyroSensor, direction, false);
     }
 

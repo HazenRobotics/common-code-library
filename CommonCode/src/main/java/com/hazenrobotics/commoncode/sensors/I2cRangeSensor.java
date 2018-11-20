@@ -44,6 +44,15 @@ public class I2cRangeSensor extends I2cSensor implements RangeSensor {
     }
 
     /**
+     * Creates a sensor with the given address
+     * @param address The address which references the given sensor
+     * @param sensorDevice The sensor object on the hardware map to be used
+     */
+    public I2cRangeSensor(I2cDevice sensorDevice, int address) {
+        this(sensorDevice, I2cAddr.create8bit(address));
+    }
+
+    /**
      * Determines the distance in front of the sensor to the nearest object using ultrasonic sensing
      * @return The distance value (in cm) to the object
      */
