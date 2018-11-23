@@ -23,8 +23,8 @@ public enum SensorColor implements NamedColor {
     WHITE(new Color(255, 255, 255), 16),
     NULL(null, -1);
 
-    Color color;
-    int numericId;
+    private Color color;
+    private int numericId;
 
     SensorColor(Color color, int numeric) {
         this.color = color;

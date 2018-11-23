@@ -5,7 +5,7 @@ android {
     compileSdkVersion 27
     defaultConfig {
         minSdkVersion 19
-        targetSdkVersion 19
+        targetSdkVersion 27
         versionCode 1
         versionName "$ftc_version"
 
@@ -40,6 +40,8 @@ dependencies {
     implementation "com.github.modular-ftc:robotcore-repackaged:$ftc_version.0-lite"
     implementation "com.github.modular-ftc:ftc-common-repackaged:$ftc_version.0-lite"
     implementation "org.first.ftc:hardware:$ftc_version"
+
+    testImplementation 'junit:junit:4.12'
 }
 
 

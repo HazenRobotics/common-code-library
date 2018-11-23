@@ -67,15 +67,10 @@ package com.hazenrobotics.commoncode.models.angles;
 @SuppressWarnings("WeakerAccess")
 public enum NormalizedAngleUnit implements AngleUnit
 {
-    DEGREES(0), RADIANS(1);
-    public final byte bVal;
+    DEGREES(), RADIANS();
 
     protected static final double TwoPi   = 2 * Math.PI;
     public    static final float  Pif     = (float) Math.PI;
-
-    NormalizedAngleUnit(int i) {
-        bVal = (byte) i;
-    }
 
     //----------------------------------------------------------------------------------------------
     // Primitive operations
@@ -83,56 +78,32 @@ public enum NormalizedAngleUnit implements AngleUnit
 
     @Override
     public double fromDegrees(double degrees) {
-        switch (this) {
-            default:
-            case RADIANS:                   return this.normalize(degrees / 180.0 * Math.PI);
-            case DEGREES:                   return this.normalize(degrees);
-        }
+        return normalize(this.getUnnormalized().fromDegrees(degrees));
     }
 
     @Override
     public float fromDegrees(float degrees) {
-        switch (this) {
-            default:
-            case RADIANS:                   return this.normalize(degrees / 180.0f * Pif);
-            case DEGREES:                   return this.normalize(degrees);
-        }
+        return normalize(this.getUnnormalized().fromDegrees(degrees));
     }
 
     @Override
     public double fromRadians(double radians) {
-        switch (this) {
-            default:
-            case RADIANS:                   return this.normalize(radians);
-            case DEGREES:                   return this.normalize(radians / Math.PI * 180.0);
-        }
+        return normalize(this.getUnnormalized().fromRadians(radians));
     }
 
     @Override
     public float fromRadians(float radians) {
-        switch (this) {
-            default:
-            case RADIANS:                   return this.normalize(radians);
-            case DEGREES:                   return this.normalize(radians / Pif * 180.0f);
-        }
+        return normalize(this.getUnnormalized().fromRadians(radians));
     }
 
     @Override
     public double fromUnit(AngleUnit them, double theirs) {
-        switch (them.getNormalized()) {
-            default:
-            case RADIANS:                   return this.fromRadians(theirs);
-            case DEGREES:                   return this.fromDegrees(theirs);
-        }
+        return normalize(this.getUnnormalized().fromUnit(them, theirs));
     }
 
     @Override
     public float fromUnit(AngleUnit them, float theirs) {
-        switch (them.getNormalized()) {
-            default:
-            case RADIANS:                   return this.fromRadians(theirs);
-            case DEGREES:                   return this.fromDegrees(theirs);
-        }
+        return normalize(this.getUnnormalized().fromUnit(them, theirs));
     }
 
     //----------------------------------------------------------------------------------------------
@@ -141,38 +112,22 @@ public enum NormalizedAngleUnit implements AngleUnit
 
     @Override
     public double toDegrees(double inOurUnits) {
-        switch (this) {
-            default:
-            case RADIANS:                   return DEGREES.fromRadians(inOurUnits);
-            case DEGREES:                   return DEGREES.fromDegrees(inOurUnits);
-        }
+        return DEGREES.fromUnit(this, inOurUnits);
     }
 
     @Override
     public float toDegrees(float inOurUnits) {
-        switch (this) {
-            default:
-            case RADIANS:                   return DEGREES.fromRadians(inOurUnits);
-            case DEGREES:                   return DEGREES.fromDegrees(inOurUnits);
-        }
+        return DEGREES.fromUnit(this, inOurUnits);
     }
 
     @Override
     public double toRadians(double inOurUnits) {
-        switch (this) {
-            default:
-            case RADIANS:                   return RADIANS.fromRadians(inOurUnits);
-            case DEGREES:                   return RADIANS.fromDegrees(inOurUnits);
-        }
+        return RADIANS.fromUnit(this, inOurUnits);
     }
 
     @Override
     public float toRadians(float inOurUnits) {
-        switch (this) {
-            default:
-            case RADIANS:                   return RADIANS.fromRadians(inOurUnits);
-            case DEGREES:                   return RADIANS.fromDegrees(inOurUnits);
-        }
+        return RADIANS.fromUnit(this, inOurUnits);
     }
 
     //----------------------------------------------------------------------------------------------

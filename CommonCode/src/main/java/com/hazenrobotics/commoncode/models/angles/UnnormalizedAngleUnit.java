@@ -67,13 +67,7 @@ package com.hazenrobotics.commoncode.models.angles;
 @SuppressWarnings("WeakerAccess")
 public enum UnnormalizedAngleUnit implements AngleUnit
 {
-    DEGREES(0), RADIANS(1);
-    public final byte bVal;
-
-    UnnormalizedAngleUnit(int i)
-    {
-        bVal = (byte) i;
-    }
+    DEGREES(), RADIANS();
 
     //----------------------------------------------------------------------------------------------
     // Primitive operations

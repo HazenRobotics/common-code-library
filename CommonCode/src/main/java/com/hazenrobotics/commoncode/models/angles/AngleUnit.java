@@ -49,6 +49,11 @@ package com.hazenrobotics.commoncode.models.angles;
  * @see UnnormalizedAngleUnit
  */
 public interface AngleUnit {
+
+    //Default Angle Units for most needs
+    AngleUnit DEGREES = UnnormalizedAngleUnit.DEGREES;
+    AngleUnit RADIANS = UnnormalizedAngleUnit.RADIANS;
+
     double fromDegrees(double degrees);
 
     float fromDegrees(float degrees);

@@ -1,11 +1,14 @@
 package com.hazenrobotics.commoncode.models.conditions;
 
+import com.hazenrobotics.commoncode.interfaces.IdleInterface;
+
 /**
  * A Condition an abstract class that is used to tell a function when some parameter has been met.
  * The user can either define their own condition as an anonymous class, or use one of the many subclasses that extend it
  * @see RangeDistance
  * @see Timer
  * @see GyroAngle
+ * @see ColorMatch
  */
 @SuppressWarnings("unused,WeakerAccess")
 public abstract class Condition {
@@ -44,5 +47,28 @@ public abstract class Condition {
             return wasTrue;
         }
         */
+    }
+
+    /**
+     * Continually runs something until this condition {@link Condition#isTrue()}
+     * @param runnable What will be run
+     */
+    public void doUntilTrue(Runnable runnable) {
+        while (!isTrue()) {
+            runnable.run();
+        }
+    }
+
+    /**
+     * Continually idles until this condition {@link Condition#isTrue()}
+     * @param idleInterface The interface through which idling can occur
+     */
+    public void idleUntilTrue(final IdleInterface idleInterface) {
+        doUntilTrue(new Runnable() {
+            @Override
+            public void run() {
+                idleInterface.idle();
+            }
+        });
     }
 }
