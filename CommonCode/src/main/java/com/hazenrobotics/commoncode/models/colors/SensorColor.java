@@ -3,6 +3,7 @@ package com.hazenrobotics.commoncode.models.colors;
 /**
  * Colors and numbers from I2c Color Sensor's color number; See <a href="http://www.modernroboticsinc.com/Content/Images/uploaded/ColorNumber.png">color values here</a>.
  */
+@SuppressWarnings("unused")
 public enum SensorColor implements NamedColor {
     BLACK(new Color(0, 0, 0), 0),
     PURPLE(new Color(130, 0, 203), 1),
@@ -31,10 +32,12 @@ public enum SensorColor implements NamedColor {
         this.numericId = numeric;
     }
 
+    @Override
     public Color getColor() {
         return color;
     }
 
+    @Override
     public boolean equals(Color other) {
         return other.equals(this);
     }

@@ -8,4 +8,11 @@ public interface Direction {
      * @return The angle represented this direction
      */
     Angle getAngle();
+
+    /**
+     * Gets the corresponding opposite direction in a direction pair, the angle of this inverted
+     * direction should be 180 degrees more or less than this direction.
+     * @return The opposite direction
+     */
+    Direction inverted();
 }

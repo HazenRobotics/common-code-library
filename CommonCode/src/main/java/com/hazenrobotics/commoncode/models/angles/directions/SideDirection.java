@@ -9,13 +9,14 @@ public enum SideDirection implements Direction {
     LEFT(new Angle(270f, NormalizedAngleUnit.DEGREES));
 
     protected Angle angle;
+
     SideDirection(Angle angle) {
         this.angle = angle;
     }
 
     @Override
     public Angle getAngle() {
-        return angle;
+        return new Angle(angle);
     }
 
     /**

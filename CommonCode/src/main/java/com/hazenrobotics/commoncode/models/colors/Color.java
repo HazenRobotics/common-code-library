@@ -3,13 +3,14 @@ package com.hazenrobotics.commoncode.models.colors;
 /**
  * An RGB 0-255 color.
  */
+@SuppressWarnings("unused")
 public class Color {
     /**
      * This is the default margin of error used by {@link #approximatelyEquals(Color)}.
      */
     public static final int DEFAULT_MAX_DIFFERENCE = 40;
 
-    protected final int red, green, blue;
+    private final int red, green, blue;
 
     /**
      * An RGB 0-255 color.
@@ -61,6 +62,15 @@ public class Color {
     }
 
     /**
+     * Compares if this color is the same as another
+     * @param other The color to compare to
+     * @return If the RGB values of this color and another color are the same
+     */
+    public boolean equals(Color other) {
+        return red == other.red && green == other.green && blue == other.blue;
+    }
+
+    /**
      * Compares if the difference between this color and another is less than a certain amount
      * @param namedColor The named color to compare to
      * @return If the colors' differences were less than the {@link #DEFAULT_MAX_DIFFERENCE default max difference}
@@ -71,12 +81,12 @@ public class Color {
 
     /**
      * Compares if the difference between this color and another is less than a certain amount
-     * @param colorEnum The named color to compare to
+     * @param namedColor The named color to compare to
      * @param maxDifference The maximum difference between the two colors
      * @return If the colors' differences were less than the max difference
      */
-    public boolean approximatelyEquals(NamedColor colorEnum, int maxDifference) {
-        return approximatelyEquals(colorEnum.getColor(), maxDifference);
+    public boolean approximatelyEquals(NamedColor namedColor, int maxDifference) {
+        return approximatelyEquals(namedColor.getColor(), maxDifference);
     }
 
     /**
@@ -106,5 +116,15 @@ public class Color {
      */
     public int difference(Color other) {
         return Math.abs(red - other.getRed()) + Math.abs(green - other.getGreen()) + Math.abs(blue - other.getBlue());
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Color) {
+            return equals((Color) obj);
+        } else if (obj instanceof NamedColor) {
+            return equals((NamedColor) obj);
+        }
+        return super.equals(obj);
     }
 }

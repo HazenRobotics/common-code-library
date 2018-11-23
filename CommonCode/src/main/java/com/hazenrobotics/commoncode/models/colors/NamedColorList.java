@@ -7,6 +7,7 @@ import java.util.List;
  * A list of named color which can be used to quickly check if a color type is contained within
  * the list.
  */
+@SuppressWarnings("unused")
 public class NamedColorList {
     protected List<NamedColor> colors;
 

@@ -1,5 +1,6 @@
 package com.hazenrobotics.commoncode.models.angles.directions;
 
+@SuppressWarnings("unused")
 public enum RotationDirection {
     CLOCKWISE,
     COUNTER_CLOCKWISE;

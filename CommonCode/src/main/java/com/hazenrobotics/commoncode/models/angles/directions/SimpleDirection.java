@@ -3,9 +3,10 @@ package com.hazenrobotics.commoncode.models.angles.directions;
 import com.hazenrobotics.commoncode.models.angles.Angle;
 import com.hazenrobotics.commoncode.models.angles.NormalizedAngleUnit;
 
+@SuppressWarnings("unused")
 public enum SimpleDirection implements Direction {
     FORWARDS(new Angle(0f, NormalizedAngleUnit.DEGREES)),
-    BACKWARDS(new Angle(1800f, NormalizedAngleUnit.DEGREES));
+    BACKWARDS(new Angle(180f, NormalizedAngleUnit.DEGREES));
 
     protected Angle angle;
 
@@ -15,7 +16,7 @@ public enum SimpleDirection implements Direction {
 
     @Override
     public Angle getAngle() {
-        return angle;
+        return new Angle(angle);
     }
 
     /**

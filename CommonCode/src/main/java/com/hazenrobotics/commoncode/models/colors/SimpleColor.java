@@ -1,5 +1,6 @@
 package com.hazenrobotics.commoncode.models.colors;
 
+@SuppressWarnings("unused")
 public enum SimpleColor implements NamedColor {
     BLACK(new Color(0, 0, 0)),
     WHITE(new Color(255, 255, 255)),
@@ -13,10 +14,12 @@ public enum SimpleColor implements NamedColor {
         this.color = color;
     }
 
+    @Override
     public Color getColor() {
         return color;
     }
 
+    @Override
     public boolean equals(Color other) {
         return other.equals(this);
     }

@@ -415,5 +415,4 @@ public class Angle {
     public String toString() {
         return value + " " + unit;
     }
-
 }
