@@ -23,6 +23,7 @@ public enum SimpleDirection implements Direction {
      * Gets the inverted direction (so Forwards would return Backwards and vise-versa.)
      * @return The inverted direction of this
      */
+    @Override
     public SimpleDirection inverted() {
         return this == FORWARDS ? BACKWARDS : FORWARDS;
     }

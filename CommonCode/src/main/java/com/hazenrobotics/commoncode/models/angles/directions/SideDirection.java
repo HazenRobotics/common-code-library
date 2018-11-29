@@ -23,6 +23,7 @@ public enum SideDirection implements Direction {
      * Gets the inverted side direction (so Right would return Left and vise-versa.)
      * @return The inverted direction of this
      */
+    @Override
     public SideDirection inverted() {
         return this == RIGHT ? LEFT : RIGHT;
     }
