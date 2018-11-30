@@ -42,14 +42,14 @@ public class GyroAngle extends Condition {
         if (absoluteHeading) {
             Angle heading = gyroSensor.getHeading();
             Angle deltaAngle = (goingClockwise ?
-                    (heading.isGreater(angle.normalized())) : (heading.isLess(angle.normalized()))) //If ahead of where the angle is (for whichever direction we are going)
+                    (heading.isLess(angle.normalized())) : (heading.isGreater(angle.normalized()))) //If ahead of where the angle is (for whichever direction we are going)
                     ? new Angle(360f, UnnormalizedAngleUnit.DEGREES)                          //Then add 360 to do one circle around,
                     : new Angle(0f, UnnormalizedAngleUnit.DEGREES)                            //Otherwise start with no rotation
                     .subtracted(heading.subtracted(angle));                                         //and subtract the difference in angle to hit the spot behind the current position if ahead of it,
             //or move forward the difference if it is in front of the current position
-            this.targetAngle = gyroSensor.getIntegratedZ().added(goingClockwise ? deltaAngle : deltaAngle.negated());
+            this.targetAngle = gyroSensor.getIntegratedZ().added(goingClockwise ? deltaAngle.negated() : deltaAngle);
         } else {
-            this.targetAngle = gyroSensor.getIntegratedZ().added(goingClockwise ? angle : angle.negated());
+            this.targetAngle = gyroSensor.getIntegratedZ().added(goingClockwise ? angle.negated() : angle);
         }
     }
 
@@ -112,7 +112,7 @@ public class GyroAngle extends Condition {
     protected boolean condition() {
         Angle currentAngle = gyroSensor.getIntegratedZ();
         return direction.equals(RotationDirection.CLOCKWISE)    //Check the direction
-                ? currentAngle.isGreaterOrEquals(targetAngle)   //Check if we are past the target angle for whatever direction we are moving in
-                : currentAngle.isLessOrEquals(targetAngle);
+                ? currentAngle.isLessOrEquals(targetAngle)   //Check if we are past the target angle for whatever direction we are moving in
+                : currentAngle.isGreaterOrEquals(targetAngle);
     }
 }
