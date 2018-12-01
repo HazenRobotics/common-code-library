@@ -12,6 +12,7 @@ public class TankControlsDrivingController implements DrivingController {
     protected Gamepad controller;
     protected TwoWheels wheels;
     protected float speed;
+    protected boolean directionReversed;
 
     /**
      * Create a driving controller with the specified wheels and controller input
@@ -22,6 +23,7 @@ public class TankControlsDrivingController implements DrivingController {
         this.controller = controller;
         this.wheels = wheels;
         speed = 1f;
+        directionReversed = false;
     }
 
     /**
@@ -44,15 +46,24 @@ public class TankControlsDrivingController implements DrivingController {
         this.speed = maxSpeed;
     }
 
+    public boolean reverseDirection() {
+        return directionReversed = !directionReversed;
+    }
+
     @Override
     public void updateMotion() {
         TwoWheels.Coefficients wheelCoefficients = new TwoWheels.Coefficients();
 
-        //Left and right sticks control wheel power
-        //Up on the stick is negative, so the value is negated to correct for this
-        wheelCoefficients.left = -controller.left_stick_y;
-        wheelCoefficients.right = -controller.right_stick_y;
-
+        if (directionReversed) {
+            //Reversed Direction controls for driving backward
+            wheelCoefficients.left = controller.right_stick_y;
+            wheelCoefficients.right = controller.left_stick_y;
+        } else {
+            //Left and right sticks control wheel power
+            //Up on the stick is negative, so the value is negated to correct for this
+            wheelCoefficients.left = -controller.left_stick_y;
+            wheelCoefficients.right = -controller.right_stick_y;
+        }
         wheels.setPower(wheelCoefficients, speed);
     }
 
