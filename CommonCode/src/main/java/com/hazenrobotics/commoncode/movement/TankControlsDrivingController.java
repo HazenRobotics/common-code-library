@@ -12,7 +12,7 @@ public class TankControlsDrivingController implements DrivingController {
     protected Gamepad controller;
     protected TwoWheels wheels;
     protected float speed;
-    protected boolean directionReversed;
+    protected boolean orientationInverted;
 
     /**
      * Create a driving controller with the specified wheels and controller input
@@ -23,7 +23,7 @@ public class TankControlsDrivingController implements DrivingController {
         this.controller = controller;
         this.wheels = wheels;
         speed = 1f;
-        directionReversed = false;
+        orientationInverted = false;
     }
 
     /**
@@ -46,15 +46,19 @@ public class TankControlsDrivingController implements DrivingController {
         this.speed = maxSpeed;
     }
 
-    public boolean reverseDirection() {
-        return directionReversed = !directionReversed;
+    /**
+     * Changes the side of the robot which will be treated as the front for driving
+     * @return If the orientation is now inverted
+     */
+    public boolean invertOrientation() {
+        return orientationInverted = !orientationInverted;
     }
 
     @Override
     public void updateMotion() {
         TwoWheels.Coefficients wheelCoefficients = new TwoWheels.Coefficients();
 
-        if (directionReversed) {
+        if (orientationInverted) {
             //Reversed Direction controls for driving backward
             wheelCoefficients.left = controller.right_stick_y;
             wheelCoefficients.right = controller.left_stick_y;

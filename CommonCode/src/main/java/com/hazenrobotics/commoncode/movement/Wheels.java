@@ -6,7 +6,7 @@ import com.hazenrobotics.commoncode.models.angles.directions.SimpleDirection;
 import com.hazenrobotics.commoncode.models.conditions.Condition;
 
 /**
- * A means to control a robot's wheels and
+ * A means to control a robot's wheels and movement
  * @see EncoderWheels
  */
 @SuppressWarnings("unused")
