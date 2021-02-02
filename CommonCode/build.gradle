@@ -1,11 +1,11 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.github.dcendents.android-maven'
+//apply plugin: 'com.github.dcendents.android-maven'
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 28
     defaultConfig {
-        minSdkVersion 19
-        targetSdkVersion 19
+        minSdkVersion 23
+        targetSdkVersion 28
         versionCode 1
         versionName "$ftc_version"
 
@@ -36,32 +36,7 @@ group = 'com.github.HazenRobotics'
 
 dependencies {
     //FTC libraries
-    implementation "com.github.modular-ftc:robotcontroller-repackaged:$ftc_version.0-lite"
-    implementation "com.github.modular-ftc:robotcore-repackaged:$ftc_version.0-lite"
-    implementation "com.github.modular-ftc:ftc-common-repackaged:$ftc_version.0-lite"
-    implementation "org.first.ftc:hardware:$ftc_version"
-}
-
-
-//For JitPack to be able to build the library files
-
-task sourcesJar(type: Jar) {
-    from android.sourceSets.main.java.srcDirs
-    classifier = 'sources'
-}
-
-task javadoc(type: Javadoc) {
-    failOnError false
-    source = android.sourceSets.main.java.sourceFiles
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-    classpath += configurations.compile
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
-artifacts {
-    archives javadocJar
-    archives sourcesJar
+    implementation "org.firstinspires.ftc:RobotCore:$ftc_version"
+    implementation "org.firstinspires.ftc:Hardware:$ftc_version"
+    implementation "org.firstinspires.ftc:FtcCommon:$ftc_version"
 }
