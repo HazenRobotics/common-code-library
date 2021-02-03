@@ -77,7 +77,8 @@ afterEvaluate {
         }
 
         publications {
-            release(MavenPublication) {
+            maven(MavenPublication) {
+                artifactId = "commoncode"
                 artifact(sourcesJar)
                 artifact(javadocJar)
             }
