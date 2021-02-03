@@ -15,6 +15,6 @@ jobs:
       - name: Publish package
         run: |
           NEW_VERSION=$(echo "${GITHUB_REF}" | cut -d "/" -f3)
-          ./gradlew -P version=${NEW_VERSION} publish
+          bash ./gradlew -P version=${NEW_VERSION} publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
