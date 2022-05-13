@@ -3,9 +3,9 @@ apply plugin: 'maven-publish'
 //apply plugin: 'com.github.dcendents.android-maven'
 
 android {
-    compileSdkVersion 28
+    compileSdk 29
     defaultConfig {
-        minSdkVersion 23
+        minSdkVersion 24
         targetSdkVersion 28
         versionCode 1
         versionName "$ftc_version"
@@ -31,6 +31,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    buildToolsVersion '31.0.0'
 }
 
 group = 'com.hazenrobotics'
@@ -55,7 +56,7 @@ task javadoc(type: Javadoc) {
     failOnError false
     source = android.sourceSets.main.java.sourceFiles
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-    classpath += configurations.compile
+    classpath += configurations.implementation
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
@@ -88,6 +89,7 @@ afterEvaluate {
 
 
 dependencies {
+//    implementation project(':FtcRobotController')
     //FTC libraries
     implementation "org.firstinspires.ftc:RobotCore:$ftc_version"
     implementation "org.firstinspires.ftc:Hardware:$ftc_version"

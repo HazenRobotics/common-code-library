@@ -65,185 +65,214 @@ package com.hazenrobotics.commoncode.models.angles;
  * </p>
  */
 @SuppressWarnings("WeakerAccess")
-public enum NormalizedAngleUnit implements AngleUnit
-{
-    DEGREES(0), RADIANS(1);
-    public final byte bVal;
+public enum NormalizedAngleUnit implements AngleUnit {
+	DEGREES( 0 ), RADIANS( 1 );
+	public final byte bVal;
 
-    protected static final double TwoPi   = 2 * Math.PI;
-    public    static final float  Pif     = (float) Math.PI;
+	protected static final double TwoPi = 2 * Math.PI;
+	public static final float Pif = (float) Math.PI;
 
-    NormalizedAngleUnit(int i) {
-        bVal = (byte) i;
-    }
+	NormalizedAngleUnit( int i ) {
+		bVal = (byte) i;
+	}
 
-    //----------------------------------------------------------------------------------------------
-    // Primitive operations
-    //----------------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------------
+	// Primitive operations
+	//----------------------------------------------------------------------------------------------
 
-    @Override
-    public double fromDegrees(double degrees) {
-        switch (this) {
-            default:
-            case RADIANS:                   return this.normalize(degrees / 180.0 * Math.PI);
-            case DEGREES:                   return this.normalize(degrees);
-        }
-    }
+	@Override
+	public double fromDegrees( double degrees ) {
+		switch( this ) {
+			default:
+			case RADIANS:
+				return this.normalize( degrees / 180.0 * Math.PI );
+			case DEGREES:
+				return this.normalize( degrees );
+		}
+	}
 
-    @Override
-    public float fromDegrees(float degrees) {
-        switch (this) {
-            default:
-            case RADIANS:                   return this.normalize(degrees / 180.0f * Pif);
-            case DEGREES:                   return this.normalize(degrees);
-        }
-    }
+	@Override
+	public float fromDegrees( float degrees ) {
+		switch( this ) {
+			default:
+			case RADIANS:
+				return this.normalize( degrees / 180.0f * Pif );
+			case DEGREES:
+				return this.normalize( degrees );
+		}
+	}
 
-    @Override
-    public double fromRadians(double radians) {
-        switch (this) {
-            default:
-            case RADIANS:                   return this.normalize(radians);
-            case DEGREES:                   return this.normalize(radians / Math.PI * 180.0);
-        }
-    }
+	@Override
+	public double fromRadians( double radians ) {
+		switch( this ) {
+			default:
+			case RADIANS:
+				return this.normalize( radians );
+			case DEGREES:
+				return this.normalize( radians / Math.PI * 180.0 );
+		}
+	}
 
-    @Override
-    public float fromRadians(float radians) {
-        switch (this) {
-            default:
-            case RADIANS:                   return this.normalize(radians);
-            case DEGREES:                   return this.normalize(radians / Pif * 180.0f);
-        }
-    }
+	@Override
+	public float fromRadians( float radians ) {
+		switch( this ) {
+			default:
+			case RADIANS:
+				return this.normalize( radians );
+			case DEGREES:
+				return this.normalize( radians / Pif * 180.0f );
+		}
+	}
 
-    @Override
-    public double fromUnit(AngleUnit them, double theirs) {
-        switch (them.getNormalized()) {
-            default:
-            case RADIANS:                   return this.fromRadians(theirs);
-            case DEGREES:                   return this.fromDegrees(theirs);
-        }
-    }
+	@Override
+	public double fromUnit( AngleUnit them, double theirs ) {
+		switch( them.getNormalized( ) ) {
+			default:
+			case RADIANS:
+				return this.fromRadians( theirs );
+			case DEGREES:
+				return this.fromDegrees( theirs );
+		}
+	}
 
-    @Override
-    public float fromUnit(AngleUnit them, float theirs) {
-        switch (them.getNormalized()) {
-            default:
-            case RADIANS:                   return this.fromRadians(theirs);
-            case DEGREES:                   return this.fromDegrees(theirs);
-        }
-    }
+	@Override
+	public float fromUnit( AngleUnit them, float theirs ) {
+		switch( them.getNormalized( ) ) {
+			default:
+			case RADIANS:
+				return this.fromRadians( theirs );
+			case DEGREES:
+				return this.fromDegrees( theirs );
+		}
+	}
 
-    //----------------------------------------------------------------------------------------------
-    // Derived operations
-    //----------------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------------
+	// Derived operations
+	//----------------------------------------------------------------------------------------------
 
-    @Override
-    public double toDegrees(double inOurUnits) {
-        switch (this) {
-            default:
-            case RADIANS:                   return DEGREES.fromRadians(inOurUnits);
-            case DEGREES:                   return DEGREES.fromDegrees(inOurUnits);
-        }
-    }
+	@Override
+	public double toDegrees( double inOurUnits ) {
+		switch( this ) {
+			default:
+			case RADIANS:
+				return DEGREES.fromRadians( inOurUnits );
+			case DEGREES:
+				return DEGREES.fromDegrees( inOurUnits );
+		}
+	}
 
-    @Override
-    public float toDegrees(float inOurUnits) {
-        switch (this) {
-            default:
-            case RADIANS:                   return DEGREES.fromRadians(inOurUnits);
-            case DEGREES:                   return DEGREES.fromDegrees(inOurUnits);
-        }
-    }
+	@Override
+	public float toDegrees( float inOurUnits ) {
+		switch( this ) {
+			default:
+			case RADIANS:
+				return DEGREES.fromRadians( inOurUnits );
+			case DEGREES:
+				return DEGREES.fromDegrees( inOurUnits );
+		}
+	}
 
-    @Override
-    public double toRadians(double inOurUnits) {
-        switch (this) {
-            default:
-            case RADIANS:                   return RADIANS.fromRadians(inOurUnits);
-            case DEGREES:                   return RADIANS.fromDegrees(inOurUnits);
-        }
-    }
+	@Override
+	public double toRadians( double inOurUnits ) {
+		switch( this ) {
+			default:
+			case RADIANS:
+				return RADIANS.fromRadians( inOurUnits );
+			case DEGREES:
+				return RADIANS.fromDegrees( inOurUnits );
+		}
+	}
 
-    @Override
-    public float toRadians(float inOurUnits) {
-        switch (this) {
-            default:
-            case RADIANS:                   return RADIANS.fromRadians(inOurUnits);
-            case DEGREES:                   return RADIANS.fromDegrees(inOurUnits);
-        }
-    }
+	@Override
+	public float toRadians( float inOurUnits ) {
+		switch( this ) {
+			default:
+			case RADIANS:
+				return RADIANS.fromRadians( inOurUnits );
+			case DEGREES:
+				return RADIANS.fromDegrees( inOurUnits );
+		}
+	}
 
-    //----------------------------------------------------------------------------------------------
-    // Normalization
-    //----------------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------------
+	// Normalization
+	//----------------------------------------------------------------------------------------------
 
-    @Override
-    public double normalize(double mine) {
-        switch (this) {
-            default:
-            case RADIANS:               return normalizeRadians(mine);
-            case DEGREES:               return normalizeDegrees(mine);
-        }
-    }
+	@Override
+	public double normalize( double mine ) {
+		switch( this ) {
+			default:
+			case RADIANS:
+				return normalizeRadians( mine );
+			case DEGREES:
+				return normalizeDegrees( mine );
+		}
+	}
 
-    @Override
-    public float normalize(float mine) {
-        switch (this) {
-            default:
-            case RADIANS:               return normalizeRadians(mine);
-            case DEGREES:               return normalizeDegrees(mine);
-        }
-    }
+	@Override
+	public float normalize( float mine ) {
+		switch( this ) {
+			default:
+			case RADIANS:
+				return normalizeRadians( mine );
+			case DEGREES:
+				return normalizeDegrees( mine );
+		}
+	}
 
-    public static double normalizeDegrees(double degrees) {
-        while (degrees >= 360.0) degrees -= 360.0;
-        while (degrees < 0.0) degrees += 360.0;
-        return degrees;
-    }
+	public static double normalizeDegrees( double degrees ) {
+		while( degrees >= 360.0 ) degrees -= 360.0;
+		while( degrees < 0.0 ) degrees += 360.0;
+		return degrees;
+	}
 
-    public static float normalizeDegrees(float degrees) {
-        return (float)normalizeDegrees((double)degrees);
-    }
+	public static float normalizeDegrees( float degrees ) {
+		return (float) normalizeDegrees( (double) degrees );
+	}
 
-    public static double normalizeRadians(double radians) {
-        while (radians >= TwoPi) radians -= TwoPi;
-        while (radians < 0) radians += TwoPi;
-        return radians;
-    }
+	public static double normalizeRadians( double radians ) {
+		while( radians >= TwoPi ) radians -= TwoPi;
+		while( radians < 0 ) radians += TwoPi;
+		return radians;
+	}
 
-    public static float normalizeRadians(float radians) {
-        return (float)normalizeRadians((double)radians);
-    }
+	public static float normalizeRadians( float radians ) {
+		return (float) normalizeRadians( (double) radians );
+	}
 
-    @Override
-    public UnnormalizedAngleUnit getUnnormalized() {
-        switch (this) {
-            default:
-            case RADIANS:   return UnnormalizedAngleUnit.RADIANS;
-            case DEGREES:   return UnnormalizedAngleUnit.DEGREES;
-        }
-    }
+	@Override
+	public UnnormalizedAngleUnit getUnnormalized( ) {
+		switch( this ) {
+			default:
+			case RADIANS:
+				return UnnormalizedAngleUnit.RADIANS;
+			case DEGREES:
+				return UnnormalizedAngleUnit.DEGREES;
+		}
+	}
 
-    @Override
-    public NormalizedAngleUnit getNormalized() {
-        return this;
-    }
+	@Override
+	public NormalizedAngleUnit getNormalized( ) {
+		return this;
+	}
 
-    public org.firstinspires.ftc.robotcore.external.navigation.AngleUnit toFtcAngleUnit() {
-        switch (this) {
-            default:
-            case RADIANS: return org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.RADIANS;
-            case DEGREES: return org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES;
-        }
-    }
+	public org.firstinspires.ftc.robotcore.external.navigation.AngleUnit toFtcAngleUnit( ) {
+		switch( this ) {
+			default:
+			case RADIANS:
+				return org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.RADIANS;
+			case DEGREES:
+				return org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES;
+		}
+	}
 
-    public static NormalizedAngleUnit fromFtcAngleUnit(org.firstinspires.ftc.robotcore.external.navigation.AngleUnit ftcUnit) {
-        switch (ftcUnit) {
-            default:
-            case RADIANS: return NormalizedAngleUnit.RADIANS;
-            case DEGREES: return NormalizedAngleUnit.DEGREES;
-        }
-    }
+	public static NormalizedAngleUnit fromFtcAngleUnit( org.firstinspires.ftc.robotcore.external.navigation.AngleUnit ftcUnit ) {
+		switch( ftcUnit ) {
+			default:
+			case RADIANS:
+				return NormalizedAngleUnit.RADIANS;
+			case DEGREES:
+				return NormalizedAngleUnit.DEGREES;
+		}
+	}
 }

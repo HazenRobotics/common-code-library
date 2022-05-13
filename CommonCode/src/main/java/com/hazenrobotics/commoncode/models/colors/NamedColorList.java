@@ -8,44 +8,48 @@ import java.util.List;
  * the list.
  */
 public class NamedColorList {
-    protected List<NamedColorEnum> colors;
 
-    /**
-     * Initializes a new color list
-     */
-    public NamedColorList() {
-        colors = new LinkedList<>();
-    }
+	protected List<NamedColorEnum> colors;
 
-    /**
-     * Adds a color name to the list
-     * @param namedColor The color to add to the list
-     */
-    public void addColor(NamedColorEnum namedColor) {
-        colors.add(namedColor);
-    }
+	/**
+	 * Initializes a new color list
+	 */
+	public NamedColorList( ) {
+		colors = new LinkedList<>( );
+	}
 
-    /**
-     * Adds all the colors on another list to this one
-     * @param other The list of colors to add
-     */
-    public void addColorList(NamedColorList other) {
-        colors.addAll(other.colors);
-    }
+	/**
+	 * Adds a color name to the list
+	 *
+	 * @param namedColor The color to add to the list
+	 */
+	public void addColor( NamedColorEnum namedColor ) {
+		colors.add( namedColor );
+	}
 
-    /**
-     * Removes all colors from the list
-     */
-    public void clear() {
-        colors.clear();
-    }
+	/**
+	 * Adds all the colors on another list to this one
+	 *
+	 * @param other The list of colors to add
+	 */
+	public void addColorList( NamedColorList other ) {
+		colors.addAll( other.colors );
+	}
 
-    /**
-     * Checks if a color is on this list
-     * @param color The color to check for on the list
-     * @return If the color is on the list
-     */
-    public boolean contains(NamedColorEnum color) {
-        return colors.contains(color);
-    }
+	/**
+	 * Removes all colors from the list
+	 */
+	public void clear( ) {
+		colors.clear( );
+	}
+
+	/**
+	 * Checks if a color is on this list
+	 *
+	 * @param color The color to check for on the list
+	 * @return If the color is on the list
+	 */
+	public boolean contains( NamedColorEnum color ) {
+		return colors.contains( color );
+	}
 }

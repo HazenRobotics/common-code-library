@@ -7,15 +7,17 @@ import com.qualcomm.robotcore.hardware.Gamepad;
  */
 public interface GamepadInterface {
 
-    /**
-     * Accesses gamepad1 (of an OpMode)
-     * @return The first gamepad object
-     */
-    Gamepad getGamepad1();
+	/**
+	 * Accesses gamepad1 (of an OpMode)
+	 *
+	 * @return The first gamepad object
+	 */
+	Gamepad getGamepad1( );
 
-    /**
-     * Accesses gamepad2 (of an OpMode)
-     * @return The second gamepad object
-     */
-    Gamepad getGamepad2();
+	/**
+	 * Accesses gamepad2 (of an OpMode)
+	 *
+	 * @return The second gamepad object
+	 */
+	Gamepad getGamepad2( );
 }

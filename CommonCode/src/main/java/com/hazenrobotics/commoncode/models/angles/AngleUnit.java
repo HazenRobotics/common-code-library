@@ -45,43 +45,45 @@ package com.hazenrobotics.commoncode.models.angles;
  * however is not used because it makes it harder to interface with another enum in the SDK, the
  * {@link org.firstinspires.ftc.robotcore.external.navigation.UnnormalizedAngleUnit UnnormalizedAngleUnit enum}
  * This interface provides a way to have either remade enum types be a parameter.
+ *
  * @see NormalizedAngleUnit
  * @see UnnormalizedAngleUnit
  */
 public interface AngleUnit {
-    double fromDegrees(double degrees);
 
-    float fromDegrees(float degrees);
+	double fromDegrees( double degrees );
 
-    double fromRadians(double radians);
+	float fromDegrees( float degrees );
 
-    float fromRadians(float radians);
+	double fromRadians( double radians );
 
-    double fromUnit(AngleUnit them, double theirs);
+	float fromRadians( float radians );
 
-    float fromUnit(AngleUnit them, float theirs);
+	double fromUnit( AngleUnit them, double theirs );
 
-    //----------------------------------------------------------------------------------------------
-    // Derived operations
-    //----------------------------------------------------------------------------------------------
+	float fromUnit( AngleUnit them, float theirs );
 
-    float normalize(float mine);
+	//----------------------------------------------------------------------------------------------
+	// Derived operations
+	//----------------------------------------------------------------------------------------------
 
-    double normalize(double mine);
+	float normalize( float mine );
 
-    double toDegrees(double inOurUnits);
+	double normalize( double mine );
 
-    float toDegrees(float inOurUnits);
+	double toDegrees( double inOurUnits );
 
-    double toRadians(double inOurUnits);
+	float toDegrees( float inOurUnits );
 
-    float toRadians(float inOurUnits);
+	double toRadians( double inOurUnits );
 
-    //----------------------------------------------------------------------------------------------
-    // Normalization
-    //----------------------------------------------------------------------------------------------
+	float toRadians( float inOurUnits );
 
-    UnnormalizedAngleUnit getUnnormalized();
+	//----------------------------------------------------------------------------------------------
+	// Normalization
+	//----------------------------------------------------------------------------------------------
 
-    NormalizedAngleUnit getNormalized();
+	UnnormalizedAngleUnit getUnnormalized( );
+
+	NormalizedAngleUnit getNormalized( );
 }

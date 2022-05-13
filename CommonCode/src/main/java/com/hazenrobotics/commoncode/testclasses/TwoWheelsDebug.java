@@ -12,23 +12,24 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
  * the direction will need to be reverse on your final configuration.
  */
 public class TwoWheelsDebug extends LinearOpMode {
-    @Override
-    public void runOpMode() {
-        DcMotor left = hardwareMap.dcMotor.get("left");
-        DcMotor right = hardwareMap.dcMotor.get("right");
 
-        left.setDirection(DcMotorSimple.Direction.FORWARD);
-        right.setDirection(DcMotorSimple.Direction.FORWARD);
+	@Override
+	public void runOpMode( ) {
+		DcMotor left = hardwareMap.dcMotor.get( "left" );
+		DcMotor right = hardwareMap.dcMotor.get( "right" );
 
-        waitForStart();
+		left.setDirection( DcMotorSimple.Direction.FORWARD );
+		right.setDirection( DcMotorSimple.Direction.FORWARD );
 
-        while (opModeIsActive()) {
-            left.setPower(-gamepad1.left_stick_y);
-            right.setPower(-gamepad1.right_stick_y);
-            telemetry.addData("Left Power:", " " + left.getPower());
-            telemetry.addData("Right Power:", " " + right.getPower());
-            telemetry.update();
-            idle();
-        }
-    }
+		waitForStart( );
+
+		while( opModeIsActive( ) ) {
+			left.setPower( -gamepad1.left_stick_y );
+			right.setPower( -gamepad1.right_stick_y );
+			telemetry.addData( "Left Power:", " " + left.getPower( ) );
+			telemetry.addData( "Right Power:", " " + right.getPower( ) );
+			telemetry.update( );
+			idle( );
+		}
+	}
 }
